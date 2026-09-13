@@ -1,43 +1,35 @@
 # 勇者アバンド
 
-放置育成 × 協力型オンラインRPG。ドット絵の冒険者を育て、50職の転職、装備の厳選、アクセサリー合成、仲間との自動戦闘を楽しむゲームです。
+放置育成 × 協力型オンラインRPG。50職を育て、ドット絵の自動戦闘、装備厳選、アクセサリー合成、交換、仲間との攻略、定期PvP大会を楽しむゲームです。
 
 ## 現在の状態
 
-要件・基本設計・詳細設計のベースラインを作成しました。ゲーム本体は実装前です。ユーザー指定以外の設定・数値は仮決定であり、確認とプレイテストで調整します。
+設計ベースラインv0.2。ゲーム本体は実装前。ユーザー回答によりSteamで600円買い切り、軽量化を重視する方針を確定しました。
 
-基幹設計はこの `work` ブランチに保存しています。追加のデータモデル・画面・運用などは、一括書込みがツール側で拒否されたため、会話添付 `yusha_abandoned_design_supplement_v0.1.1.zip` に分離しました。補足全文のRepository統合は未完了です。
+街40人/通常4人/レイド12人、1活動キャラ・通常同時出撃1件・8時間指示、50職・キャラLv100/職Lv50・4能動+2受動、合成後の永久本人専用化を採用。PvEに定期PvP大会を加えました。
 
-## 基幹設計
+オンラインは「めっちゃカメレオン」を参考に運営負担を抑える方向です。完全P2Pか最小の公式判定基盤を併用するか、費用上限は未確定。SteamがMMOの計算と保存を全て無料で代行する前提にはしていません。大会の週次4対4等の細部と、Godot/C#の具体採用は提案・検証対象です。
 
-1. [企画概要](docs/project/PROJECT_BRIEF.md)
-2. [要件定義](docs/design/REQUIREMENTS.md)
-3. [基本設計](docs/design/BASIC_DESIGN.md)
-4. [詳細設計](docs/design/DETAILED_DESIGN.md)
-5. [50職の職業表](docs/design/JOBS.md)
-6. [固定スキル・8属性の魔法](docs/design/SKILLS.md)
-7. [装備・合成・経済](docs/design/ITEMS_ECONOMY.md)
-8. [ダンジョン・放置・協力](docs/design/WORLD_MMO.md)
-9. [API](docs/design/API.md)
-10. [出典](docs/design/SOURCES.md)
+## 読む順番
 
-## 作業と確認事項
+1. [企画概要](docs/project/PROJECT_BRIEF.md)・[決定事項と残る判断](docs/project/OPEN_DECISIONS.md)
+2. [要件定義](docs/design/REQUIREMENTS.md)・[基本設計](docs/design/BASIC_DESIGN.md)・[戦闘詳細](docs/design/DETAILED_DESIGN.md)
+3. [オンライン方式・軽量化・販売条件](docs/design/ONLINE_LIGHTWEIGHT.md)
+4. [定期PvP大会の設計](docs/design/PVP_TOURNAMENT.md)
+5. [50職](docs/design/JOBS.md)・[固定スキルと8属性魔法](docs/design/SKILLS.md)
+6. [装備・合成・経済](docs/design/ITEMS_ECONOMY.md)・[ダンジョンと協力](docs/design/WORLD_MMO.md)
+7. [API](docs/design/API.md)・[基幹の出典](docs/design/SOURCES.md)
+8. [Task](docs/project/TASKS.md)・[次のWork Unit](docs/project/NEXT_WORK.md)・[作業状態](docs/project/AI_WORK_STATE.md)
+9. [今回の文書レビュー](docs/quality/DESIGN_REVISION_02.md)
 
-- [Task計画](docs/project/TASKS.md)
-- [次のWork Unit](docs/project/NEXT_WORK.md)
-- [作業状態と未統合資料](docs/project/AI_WORK_STATE.md)
-- [仮決定・確認事項](docs/project/OPEN_DECISIONS.md)
+## 保存・検証の範囲
 
-## 補足資料
+今回の価格・軽量化・PvP追加はworkに保存しています。前回のデータモデル・UI・運用等の補足は会話添付 yusha_abandoned_design_supplement_v0.1.1.zip に分離されたままで、全文統合はYA-D03に残ります。旧ZIPだけでは今回の更新を含みません。
 
-添付ZIPは基幹設計の完全な複製ではなく、追加設計・職業参照一覧・検算用モデル・スクリプト・結果を含む19ファイルです。ブラウザで読む `index.html` を同梱しています。
-
-設計モデルと明示した式の静的検算は37/37成功。Repository全文の自動照合、ゲーム実動、Steam接続、負荷、バランスの試験とは区別します。
-
-補足の重要な修正は、全滅したイベント時刻から300秒を数えること、行動間隔を100ms単位へ切り上げること、1ルーム/1周回/反復指示の区別、レイド目的達成不能時の終了です。元の基幹文書への反映は残っています。
+今回の確認は文書レビュー。ゲーム実動、Steam/P2P接続、動作メモリ、PvPバランス、負荷試験とは区別します。前回の37/37検算を今回の新要素の成功証拠に流用しません。
 
 ## 再開
 
 `/continue Shota-Zaki/yusha-abandoned`
 
-最初に `AGENTS.md` と作業状態を確認してください。補足の取得・統合状態を確認せず、Repositoryだけに全設計が揃っていると扱わないでください。
+最初にAGENTSと作業状態を読み、YA-01の軽量試作と純粋Combatへ進みます。開発状態はwork、公開・配布に必要な最小treeはmainで管理します。

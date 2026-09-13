@@ -3,42 +3,51 @@
 - Project: Shota-Zaki/yusha-abandoned / 勇者アバンド
 - Date: 2026-09-13
 - Branch: work
-- 基幹設計commit: c8eadd137ca0b685d91707232f8c3b19a8aa6eab
-- Design: 基幹v0.1 + 添付補足v0.1.1
+- 今回の開始commit: 2655688744fb88e0cd29dbe4a8e35ea6bcd41517
+- Design: 基幹0.2 + 旧補足0.1.1（未統合分あり）
+- Current: YA-D04 設計更新完了
 - Game implementation: 未開始
-- Current: 設計作成完了、補足のRepository統合は残る
 - Next implementation: YA-01
 
-## 完了
+## 今回の回答を反映した確定事項
 
-指定要件と非機能目標、20+20+10の50職、武器制限、固有特性、各4能動+2受動の300系統、8属性4段階、成長・装備・合成・交換・市場・12地域6難易度・離席・全滅・APIを基幹文書に定義した。
+Steamで軽量なゲームとして販売、600円買い切り。街40人/通常4人/レイド12人、1活動キャラ・通常同時出撃1件・8時間指示を承認。提示の50職、キャラLv100/職Lv50、固定4能動+2受動、職外スキル継承なしを承認。未合成品は外せば交換可能、合成で永久本人専用を承認。PvEを基本に定期PvP大会を追加。
 
-補足資料にデータモデル、UI、運用、ADR、境界修正、ボス行動、初回体験、Taskと再開情報、検算モデルとスクリプトを作成。モデルと明示した式の37/37静的検算が成功。Repository全文の自動抽出・照合ではない。
+「めっちゃカメレオンと同じ感じ」は低運営負担の方向として記録。Steamが任意のゲーム計算を無料ホストする承認や、別途有料契約の承認ではない。
 
-## 保存状態と復元
+## 新しい正本
 
-追加設計4文書の一括書込みがツール側で拒否された。拒否された文書を別の経路でRepositoryへ保存せず、会話添付に分離した。
+- docs/project/OPEN_DECISIONS.md: 回答①〜⑧と残るD01/D09
+- docs/design/REQUIREMENTS.md: FR31価格、FR32定期PvP、FR33分離、NFR11軽量/NFR12低運営負担
+- docs/design/BASIC_DESIGN.md: Steamロビー、P2P候補と公式判定境界、大会モジュール
+- docs/design/ONLINE_LIGHTWEIGHT.md: 一次資料の確認範囲、A/B比較、軽量目標、600円条件
+- docs/design/PVP_TOURNAMENT.md: 登録・ビルド・戦闘・勝敗・API/DB・画面・障害・試験案
+- docs/quality/DESIGN_REVISION_02.md: 今回の文書レビューと限界
 
-添付名: yusha_abandoned_design_supplement_v0.1.1.zip
-内容: 19ファイル、index.html、docs/design/DATA_MODEL.md、UI.md、OPERATIONS.md、ADR.md、EDGE_CASES.md、CONTENT_DETAILS.md、CATALOG_REFERENCE.md、SOURCES.md、project文書、quality文書、data/design_model.json、tools/validate_design.py等。
+対応するREADME/AGENTS/PROJECT_BRIEF/TASKS/NEXT_WORKも更新する。
 
-添付は基幹14ファイルの完全な複製ではない。ここに全追加文書が存在すると扱わない。取得できない場合も、チャット記憶から未取得の本文を推測して完了扱いしない。
+## 未確定事項
 
-## 重要な補正（元文書への反映は未完了）
+D01: 完全P2P/運営計算基盤ゼロ優先か、信頼できる最小の公式判定・保存基盤を認めるか。現行の交換/8時間/公式大会を維持するB案を提案、費用・契約は未承認。基盤の最終選定だけに影響を限定し、純粋Combat/UIを停止しない。
 
-- 全滅制限は処理完了時刻ではなく、サーバーが再現した全滅イベント時刻+300秒。12:00全滅、12:20復帰なら制限は終了済み。
-- 計算後の行動間隔は最短値を守ったうえで100ms単位へ切上げ。
-- 1ルーム=戦闘、5ルーム=周回、最大8時間=反復指示。蘇生や致死耐えのリセット境界を区別。
-- レイドは最終目的未達成の隊が全滅し達成不能になった場合も失敗終了。
-- SKILLSの自然語の発想源は12語で、16語表記を修正予定。J31の毒刃は出血プログラムPBなので裂傷刃へ名称修正予定。
+D04: 軽さとSteamは確定。Godot4 Compatibility/C#は第一候補、Version・RAM・配布容量・対応スペックは未検証。
 
-## 仮決定と保留
+D09: 週1回、4対4、登録ビルドの非同期オート戦、レベル統一/所持装備、3ゲーム、180秒、称号外見報酬、PvE制限非連動は提案。大会の存在そのものは確定。
 
-D01〜08は確認前。Steamサービス+運営サーバー、街40/通常4/レイド12、1活動キャラ、8時間、Windows/Godot .NET/C#、買い切り候補、20/20/10職、装備時は未拘束・合成で本人専用、PvE等を仮定して設計した。
+## 検証状態
 
-QAの実動試験、バランス、Steam、DB競合、負荷、復元訓練は未実施。初級職の用途は設計目標であって達成実績ではない。
+今回は文書の静的レビューのみ。P2P実接続、Steam実機、メモリ/速度、DB競合、PvPバランス、負荷・復元は未実施。前回の37/37は旧設計モデルの記録であり、今回の大会や通信方式がテスト済みという意味ではない。
 
-YA-D03: 補足全文のRepository統合。
-YA-M01: 共通Rules全文Snapshot。正式版2.0.0、source aa9fcf26a5c463e37591438ed3e6f410974c9878を確認したが全文同期は未完了。
+## 旧補足と残作業
 
-原則workで作業し、mainには配布・公開に必要な内容だけを選別する。
+前回の追加設計の一括保存が拒否され、会話添付 yusha_abandoned_design_supplement_v0.1.1.zip に分離されている。今回これを別経路でRepositoryへ統合してはいない。YA-D03は保留のまま。取得時は今回のv0.2の回答済み事項を旧版で上書きしない。
+
+旧補足の主な内容: DATA_MODEL/UI/OPERATIONS/ADR/EDGE_CASES/CONTENT_DETAILS/CATALOG_REFERENCE、検算モデルとスクリプト等。基幹全文の複製ではない。未取得本文を推測して統合済みにしない。
+
+前回からの補正: 行動間隔100ms切上げ、ルーム/周回/反復指示の区別、レイド目的達成不能の失敗終了、魔法の発想源語数/毒刃表記修正は旧基幹詳細への反映状況をYA-D03で確認する。全滅時刻+300秒は今回REQUIREMENTS/AGENTS/NEXT_WORKに明示した。
+
+YA-M01: 共通Rules全文Snapshot未同期。正式版2.0.0/source aa9fcf26a5c463e37591438ed3e6f410974c9878の参照記録を維持。
+
+## 次の作業
+
+YA-01の軽量試作と決定的Combatコア。大会はYA-P01/02/03、SteamロビーとP2P比較はYA-12B。正本の更新はwork、公開時だけ必要物をmainへ選別する。
