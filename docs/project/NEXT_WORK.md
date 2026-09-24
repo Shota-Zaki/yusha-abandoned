@@ -20,6 +20,8 @@ D01の契約やSteam AppIDが未確定でも純粋コアと描画の試作を進
 
 ## 旧補足の扱い
 
-前回の yusha_abandoned_design_supplement_v0.1.1.zip は旧追加設計であり、Repository全文統合はYA-D03として残る。今回のPvP・価格・軽量方針はZIPに入っていない。補足の取得・統合時にはv0.2を優先する。
+前回の `yusha_abandoned_design_supplement_v0.1.1.zip` に含まれていた設計内容は、Libraryから取得できた可読HTMLを `docs/archive/design-supplement-v0.1.1.html` としてRepository内へ保存した。これは元ZIPのbyte-exact archiveではなく、履歴入力をRepositoryだけで参照可能にするためのsource snapshotである。
+
+YA-D03の意味統合は未完了。現行v0.2のPvP・600円・軽量化・承認済み決定を常に優先し、旧補足のDATA_MODEL / UI / OPERATIONS / ADR / EDGE_CASES / CONTENT_DETAILS / CATALOG_REFERENCEを差分確認して、現在も有効な内容だけを正本へ統合する。
 
 AGENTS → RULES_SOURCE → TASKS → AI_WORK_STATEから復元し、現在Taskに必要な本文だけ読む。再開入口は `/continue Shota-Zaki/yusha-abandoned`。
