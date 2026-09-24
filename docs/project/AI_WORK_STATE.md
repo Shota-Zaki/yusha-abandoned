@@ -4,7 +4,7 @@
 - Date: 2026-09-13
 - Branch: work
 - 今回の開始commit: 2655688744fb88e0cd29dbe4a8e35ea6bcd41517
-- Design: 基幹0.2 + 旧補足0.1.1（未統合分あり）
+- Design: 基幹0.2 + 旧補足0.1.1（source snapshot回収済み、意味統合は未完了）
 - Current: YA-D04 設計更新完了
 - Game implementation: 未開始
 - Next implementation: YA-01
@@ -40,9 +40,9 @@ D09: 週1回、4対4、登録ビルドの非同期オート戦、レベル統一
 
 ## 旧補足と残作業
 
-前回の追加設計の一括保存が拒否され、会話添付 yusha_abandoned_design_supplement_v0.1.1.zip に分離されている。今回これを別経路でRepositoryへ統合してはいない。YA-D03は保留のまま。取得時は今回のv0.2の回答済み事項を旧版で上書きしない。
+前回の追加設計は会話添付 `yusha_abandoned_design_supplement_v0.1.1.zip` に分離されていたが、2026-09-24にLibraryから可読HTMLを回収し、`docs/archive/design-supplement-v0.1.1.html`へ保存した。元ZIPのbyte-exact archiveではないため、そのようには扱わない。
 
-旧補足の主な内容: DATA_MODEL/UI/OPERATIONS/ADR/EDGE_CASES/CONTENT_DETAILS/CATALOG_REFERENCE、検算モデルとスクリプト等。基幹全文の複製ではない。未取得本文を推測して統合済みにしない。
+旧補足の主な内容は DATA_MODEL / UI / OPERATIONS / ADR / EDGE_CASES / CONTENT_DETAILS / CATALOG_REFERENCE、検算モデルとスクリプト等。Repositoryだけで本文を参照可能になったためYA-D03はReadyへ変更したが、現行v0.2との意味差分統合は未完了。v0.2の回答済み事項を旧版で上書きしない。
 
 前回からの補正: 行動間隔100ms切上げ、ルーム/周回/反復指示の区別、レイド目的達成不能の失敗終了、魔法の発想源語数/毒刃表記修正は旧基幹詳細への反映状況をYA-D03で確認する。全滅時刻+300秒は今回REQUIREMENTS/AGENTS/NEXT_WORKに明示した。
 
