@@ -7,9 +7,9 @@ Revision 0.2 / 2026-09-13。設計・Repository保存・実装・試験を分け
 |ID|状態|対象|完了条件・証跡|
 |---|---|---|---|
 |YA-D00|Done|要件・基本設計・基幹詳細設計|基幹commit c8eadd137ca0b685d91707232f8c3b19a8aa6eab。以後の改訂は現行正本を優先|
-|YA-D01|作成完了・Repository未反映|データ/UI/運用/境界/コンテンツ補足|前回添付 yusha_abandoned_design_supplement_v0.1.1.zip|
+|YA-D01|Source snapshot preserved|データ/UI/運用/境界/コンテンツ補足|Libraryから回収した可読HTML snapshotを`docs/archive/design-supplement-v0.1.1.html`へ保存。元ZIPのbyte-exact archiveではない|
 |YA-D02|Done（前回記録）|設計モデルの検算|前回の添付に37/37と記録。今回の大会・軽量化を検証した結果ではない|
-|YA-D03|保留|旧補足のRepository統合|資料の版と差分を確認して統合。今回この未統合を解消したとは扱わない|
+|YA-D03|Ready|旧補足のRepository統合|Repository内snapshotと現行v0.2を差分確認し、現行決定を優先して必要な内容だけ正本へ統合する。snapshot保存だけを意味統合完了とは扱わない|
 |YA-D04|Done|確認回答・600円・軽量化・PvP大会の設計反映|OPEN_DECISIONS、REQUIREMENTS、BASIC_DESIGN、ONLINE_LIGHTWEIGHT、PVP_TOURNAMENTと状態同期。静的レビューはdocs/quality/DESIGN_REVISION_02.md|
 
 ## 実装計画
