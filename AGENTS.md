@@ -6,7 +6,7 @@
 
 企画は `docs/project/PROJECT_BRIEF.md`。回答済み/未確定は `docs/project/OPEN_DECISIONS.md`。要件は `docs/design/REQUIREMENTS.md`、基本設計は `BASIC_DESIGN.md`、戦闘詳細は `DETAILED_DESIGN.md`。今回の追加正本は `ONLINE_LIGHTWEIGHT.md` と `PVP_TOURNAMENT.md`。
 
-最新のユーザー指示、Repositoryの確定事項、仮決定の順に扱う。v0.2の決定事項を旧補足v0.1.1の仮決定で上書きしない。旧補足全文のRepository未統合はYA-D03として別管理する。
+最新のユーザー指示、Repositoryの確定事項、仮決定の順に扱う。v0.2の決定事項を旧補足v0.1.1の仮決定で上書きしない。旧補足は`docs/archive/design-supplement-v0.1.1.html`に可読source snapshotを保持し、YA-D03で現行正本との差分を意味統合する。snapshotは元ZIPのbyte-exact archiveではない。
 
 ## プロジェクト固有
 
