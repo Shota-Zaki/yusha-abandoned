@@ -1,0 +1,1780 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>勇者アバンド｜設計補足 v0.1.1</title><style>*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:#182b34;background:#f4f5f0;font-family:system-ui,-apple-system,"Yu Gothic","Meiryo",sans-serif;line-height:1.9}header{padding:40px 5vw;background:#173d3c;color:#fff}header small{letter-spacing:.18em;color:#c5d8c2}header h1{font-size:34px;margin:.2em 0}header p{max-width:850px}nav{position:fixed;top:0;left:0;width:264px;height:100vh;overflow:auto;padding:24px 18px;background:#fff;border-right:1px solid #dce3df}nav strong{display:block;margin-bottom:16px}nav a{display:block;font-size:13px;padding:8px 10px;color:#24574f;text-decoration:none;border-radius:6px}nav a:hover,nav a:focus{background:#e5eee6}main,header{margin-left:264px}main{max-width:1480px;padding:28px 3vw 70px}section{background:#fff;padding:30px 32px;border:1px solid #dce3df;border-radius:12px;margin:0 0 28px;scroll-margin-top:18px}section h1{font-size:25px;color:#173d3c;margin-top:0;border-bottom:3px solid #d1a766;padding-bottom:14px}h2{font-size:20px;margin-top:2em}h3{font-size:17px}p,li{font-size:15px}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;font-size:13px;line-height:1.65;margin:14px 0}th{background:#e9f0e9;color:#173d3c;text-align:left;white-space:nowrap}th,td{border:1px solid #dce3df;padding:10px;vertical-align:top}tr:nth-child(even){background:#fafbf8}code{padding:2px 5px;background:#f0f3ee;border-radius:4px;overflow-wrap:anywhere}pre{overflow:auto;padding:18px;background:#edf1ed}a{color:#145f7b;overflow-wrap:anywhere}ul,ol{padding-left:1.5em}.badge{display:inline-block;padding:5px 11px;border:1px solid #8ca99b;border-radius:4px;font-size:12px;margin-right:8px}@media(max-width:1000px){nav{position:relative;width:auto;height:auto;max-height:260px}nav a{display:inline-block}main,header{margin-left:0}section{padding:20px}header h1{font-size:28px}}@media print{nav{display:none}main,header{margin-left:0}section{break-before:page;border:0;padding:0}header{background:white;color:black}a{color:inherit}.table-wrap{overflow:visible}th,td{padding:5px;font-size:10px}}</style></head><body><nav aria-label="設計書目次"><strong>勇者アバンド / 設計書</strong><a href="#section-0">勇者アバンド — 設計補足 v0.1.1</a><a href="#section-1">職業・スキル・魔法の参照一覧</a><a href="#section-2">データモデル・整合性設計</a><a href="#section-3">画面・操作・ドット絵設計</a><a href="#section-4">境界条件・レビューでの修正</a><a href="#section-5">コンテンツ補足・初回体験・ボス行動</a><a href="#section-6">運用・監視・検証設計</a><a href="#section-7">主要な設計判断</a><a href="#section-8">Task計画</a><a href="#section-9">次のWork Unit</a><a href="#section-10">AI Work State</a><a href="#section-11">最後に確認する事項</a><a href="#section-12">設計レビューと追跡</a><a href="#section-13">参照元</a></nav><header><small>YUSHA ABANDONED · DESIGN BASELINE</small><h1>勇者アバンド</h1><p>放置育成と、仲間と挑むオンラインRPG。50職・装備厳選・アクセサリー合成・自動戦闘の設計補足。</p><span class="badge">v0.1.1 · 2026-09-13</span><span class="badge">設計モデル検算 37/37</span><p>基幹文書はGitHub。ここに含む追加設計はRepository未反映です。ゲーム本体・実動試験はこれからの工程です。</p></header><main><section id="section-0"><h1>勇者アバンド — 設計補足 v0.1.1</h1>
+<p>2026-09-13 / 要件定義・基本設計・詳細設計の成果物</p>
+<h2>成果物の構成</h2>
+<p>基幹設計はGitHubのworkに保存済み。追加文書の一括保存はツール側で拒否されたため、この補足資料に分けて渡している。このZIPはRepositoryの全ファイルをまとめた完全版ではない。</p>
+<p>基幹設計commit: <code>c8eadd137ca0b685d91707232f8c3b19a8aa6eab</code></p>
+<p><a href="index.html">ブラウザで読む</a> / <a href="docs/project/TASKS.md">作業計画</a> / <a href="docs/quality/DESIGN_REVIEW.md">レビュー</a></p>
+<h2>基幹設計（GitHub・固定commit）</h2>
+<ul>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/AGENTS.md">AGENTS.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/README.md">README.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/rules/RULES_SOURCE.md">docs/rules/RULES_SOURCE.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/project/PROJECT_BRIEF.md">docs/project/PROJECT_BRIEF.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/project/OPEN_DECISIONS.md">docs/project/OPEN_DECISIONS.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/design/REQUIREMENTS.md">docs/design/REQUIREMENTS.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/design/BASIC_DESIGN.md">docs/design/BASIC_DESIGN.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/design/DETAILED_DESIGN.md">docs/design/DETAILED_DESIGN.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/design/JOBS.md">docs/design/JOBS.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/design/SKILLS.md">docs/design/SKILLS.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/design/ITEMS_ECONOMY.md">docs/design/ITEMS_ECONOMY.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/design/WORLD_MMO.md">docs/design/WORLD_MMO.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/design/API.md">docs/design/API.md</a></li>
+<li><a href="https://github.com/Shota-Zaki/yusha-abandoned/blob/c8eadd137ca0b685d91707232f8c3b19a8aa6eab/docs/design/SOURCES.md">docs/design/SOURCES.md</a></li>
+</ul>
+<h2>この資料に含むもの</h2>
+<p>データモデル、画面、運用、主要判断、境界条件の補正、敵/消耗品/初回体験、職業と魔法の参照一覧、Taskと再開情報、確認事項、静的検算用モデル/スクリプト/結果。</p>
+<p>補足のEDGE_CASESは基幹v0.1の曖昧な記述を修正する。統合後は元の該当文書へ反映し、正本を二重に維持しない。</p>
+<h2>検算の再実行</h2>
+<p>Python 3で<code>python tools/validate_design.py</code>を実行する。外部ライブラリ・ネットワーク・ゲーム実装は不要。検算対象は構造化した設計表と式であり、ゲームが動作することを証明するものではない。</p>
+<h2>設計の主な値</h2>
+<p>50職、各4能動+2受動、8属性×4段階、キャラLv100/職Lv50、能力505点/職SP53点、5部位装備、合成で永久本人専用、街40人・通常4人・レイド12人、8時間の放置指示、全滅時刻から300秒の出撃制限。ユーザーが指定した要件以外は仮決定。</p>
+<h2>次の工程</h2>
+<p>補足資料のRepository統合状態を確認し、YA-01で互換Versionと純粋なCombatの最小構成を作る。今回の依頼範囲である設計と、次工程の実装を区別する。</p>
+</section><section id="section-1"><h1>職業・スキル・魔法の参照一覧</h1>
+<p>解放条件はすべて同一キャラの職Lv50。+はAND。武器制限と固有特性の全文はRepositoryのJOBS.md、プログラムの倍率はSKILLS.md参照。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>職業</th>
+<th>区分</th>
+<th>必要なマスター職</th>
+<th>固定プログラム（4能動 / 2受動）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>J01</td>
+<td>戦士</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PS, PA, PBA, PG / AT, HP</td>
+</tr>
+<tr>
+<td>J02</td>
+<td>白魔法使い</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>MH, MHG, MS, MV / HE, MP</td>
+</tr>
+<tr>
+<td>J03</td>
+<td>黒魔法使い</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>E火, E雷, E氷, E闇 / MA, MP</td>
+</tr>
+<tr>
+<td>J04</td>
+<td>僧侶</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>MR, MCL, MBD, E光 / DU, MRG</td>
+</tr>
+<tr>
+<td>J05</td>
+<td>騎士</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PS, PT, PG, PC / DF, TH</td>
+</tr>
+<tr>
+<td>J06</td>
+<td>盗賊</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PS, PB, PBL, PHS / CR, EV</td>
+</tr>
+<tr>
+<td>J07</td>
+<td>弓使い</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PS, PP, PA, PM / AT, AC</td>
+</tr>
+<tr>
+<td>J08</td>
+<td>武闘家</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PS, PA, PH, PG / AT, HP</td>
+</tr>
+<tr>
+<td>J09</td>
+<td>槍使い</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PP, PA, PM, PG / AT, AC</td>
+</tr>
+<tr>
+<td>J10</td>
+<td>吟遊詩人</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PBA, PBD, PHS, PHG / DU, MRG</td>
+</tr>
+<tr>
+<td>J11</td>
+<td>踊り子</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PBA, PHS, PBL, PHG / EV, DU</td>
+</tr>
+<tr>
+<td>J12</td>
+<td>狩人</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PM, PS, PB, PP / AC, CR</td>
+</tr>
+<tr>
+<td>J13</td>
+<td>精霊使い</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>E風, E水, E土, MS / MA, MP</td>
+</tr>
+<tr>
+<td>J14</td>
+<td>呪術師</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>MDP, MSL, MDW, E闇 / DO, MA</td>
+</tr>
+<tr>
+<td>J15</td>
+<td>薬師</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PH, PHG, PCL, PHS / HE, HP</td>
+</tr>
+<tr>
+<td>J16</td>
+<td>商人</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PHG, PBA, PBD, PS / HE, DF</td>
+</tr>
+<tr>
+<td>J17</td>
+<td>侍</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PS, PG, PP, PX / AT, CR</td>
+</tr>
+<tr>
+<td>J18</td>
+<td>重装兵</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>PS, PT, PG, PBD / DF, HP</td>
+</tr>
+<tr>
+<td>J19</td>
+<td>結界師</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>MS, MSG, MBD, MCL / SH, MD</td>
+</tr>
+<tr>
+<td>J20</td>
+<td>獣使い</td>
+<td>basic</td>
+<td>初期解放</td>
+<td>SUM-P, PM, PS, PH / SU, AC</td>
+</tr>
+<tr>
+<td>J21</td>
+<td>聖騎士</td>
+<td>advanced</td>
+<td>騎士 + 僧侶</td>
+<td>PS, MH, MS, PT / SH, TH</td>
+</tr>
+<tr>
+<td>J22</td>
+<td>暗黒騎士</td>
+<td>advanced</td>
+<td>戦士 + 呪術師</td>
+<td>PB, MDR, PS, PG / AT, MD</td>
+</tr>
+<tr>
+<td>J23</td>
+<td>魔法剣士</td>
+<td>advanced</td>
+<td>戦士 + 黒魔法使い</td>
+<td>PS, E火, E氷, MBA / AT, MA</td>
+</tr>
+<tr>
+<td>J24</td>
+<td>狂戦士</td>
+<td>advanced</td>
+<td>戦士 + 武闘家</td>
+<td>PS, PA, PX, PBA / CR, HP</td>
+</tr>
+<tr>
+<td>J25</td>
+<td>守護騎士</td>
+<td>advanced</td>
+<td>騎士 + 重装兵</td>
+<td>PS, PC, PG, PT / DF, TH</td>
+</tr>
+<tr>
+<td>J26</td>
+<td>賢者</td>
+<td>advanced</td>
+<td>白魔法使い + 黒魔法使い</td>
+<td>E火, E水, MH, MCL / MA, HE</td>
+</tr>
+<tr>
+<td>J27</td>
+<td>司教</td>
+<td>advanced</td>
+<td>白魔法使い + 僧侶</td>
+<td>MHG, MR, MV, MCL / HE, DU</td>
+</tr>
+<tr>
+<td>J28</td>
+<td>呪言師</td>
+<td>advanced</td>
+<td>黒魔法使い + 呪術師</td>
+<td>EA闇, MDW, MDP, MDS / DO, MA</td>
+</tr>
+<tr>
+<td>J29</td>
+<td>召喚士</td>
+<td>advanced</td>
+<td>精霊使い + 獣使い</td>
+<td>SUM-M, E火, E風, MS / SU, MP</td>
+</tr>
+<tr>
+<td>J30</td>
+<td>陰陽師</td>
+<td>advanced</td>
+<td>呪術師 + 結界師</td>
+<td>E闇, E光, MCL, MS / SH, MRG</td>
+</tr>
+<tr>
+<td>J31</td>
+<td>忍者</td>
+<td>advanced</td>
+<td>盗賊 + 侍</td>
+<td>PS, PB, PBL, PG / EV, CR</td>
+</tr>
+<tr>
+<td>J32</td>
+<td>暗殺者</td>
+<td>advanced</td>
+<td>盗賊 + 狩人</td>
+<td>PX, PB, PM, PP / CR, AT</td>
+</tr>
+<tr>
+<td>J33</td>
+<td>狙撃手</td>
+<td>advanced</td>
+<td>弓使い + 狩人</td>
+<td>PP, PX, PM, PS / AC, CR</td>
+</tr>
+<tr>
+<td>J34</td>
+<td>竜騎士</td>
+<td>advanced</td>
+<td>槍使い + 獣使い</td>
+<td>PS, PA, PP, PBA / AT, HP</td>
+</tr>
+<tr>
+<td>J35</td>
+<td>拳聖</td>
+<td>advanced</td>
+<td>武闘家 + 僧侶</td>
+<td>PS, PH, PHG, PG / AT, HE</td>
+</tr>
+<tr>
+<td>J36</td>
+<td>戦詩人</td>
+<td>advanced</td>
+<td>吟遊詩人 + 戦士</td>
+<td>PBA, PBD, PS, PHS / DU, AT</td>
+</tr>
+<tr>
+<td>J37</td>
+<td>舞闘家</td>
+<td>advanced</td>
+<td>踊り子 + 武闘家</td>
+<td>PA, PS, PBL, PHS / CR, EV</td>
+</tr>
+<tr>
+<td>J38</td>
+<td>錬金術師</td>
+<td>advanced</td>
+<td>薬師 + 商人</td>
+<td>PH, PHG, MDP, PCL / HE, DO</td>
+</tr>
+<tr>
+<td>J39</td>
+<td>時魔法使い</td>
+<td>advanced</td>
+<td>黒魔法使い + 吟遊詩人</td>
+<td>MHS, MSL, E雷, MS / DU, MRG</td>
+</tr>
+<tr>
+<td>J40</td>
+<td>風水師</td>
+<td>advanced</td>
+<td>精霊使い + 結界師</td>
+<td>E土, E水, MSG, MBD / SH, MA</td>
+</tr>
+<tr>
+<td>J41</td>
+<td>勇者</td>
+<td>composite</td>
+<td>聖騎士 + 魔法剣士 + 賢者</td>
+<td>PS, E光, MH, PBA / HP, MA</td>
+</tr>
+<tr>
+<td>J42</td>
+<td>聖戦導師</td>
+<td>composite</td>
+<td>聖騎士 + 司教</td>
+<td>MH, MHG, PC, MV / HE, MD</td>
+</tr>
+<tr>
+<td>J43</td>
+<td>深淵騎士</td>
+<td>composite</td>
+<td>暗黒騎士 + 呪言師</td>
+<td>PS, MDR, MDP, MDW / HP, DO</td>
+</tr>
+<tr>
+<td>J44</td>
+<td>星詠み</td>
+<td>composite</td>
+<td>賢者 + 時魔法使い</td>
+<td>E光, E雷, MH, MHS / MA, MRG</td>
+</tr>
+<tr>
+<td>J45</td>
+<td>影舞者</td>
+<td>composite</td>
+<td>忍者 + 舞闘家</td>
+<td>PX, PBL, PB, PHS / CR, EV</td>
+</tr>
+<tr>
+<td>J46</td>
+<td>天弓士</td>
+<td>composite</td>
+<td>狙撃手 + 風水師</td>
+<td>PP, E風, E光, PM / AC, CR</td>
+</tr>
+<tr>
+<td>J47</td>
+<td>竜装騎士</td>
+<td>composite</td>
+<td>守護騎士 + 竜騎士</td>
+<td>PA, PC, PG, PT / DF, TH</td>
+</tr>
+<tr>
+<td>J48</td>
+<td>霊獣導師</td>
+<td>composite</td>
+<td>召喚士 + 陰陽師</td>
+<td>SUM-M, PM, MCL, MSG / SU, SH</td>
+</tr>
+<tr>
+<td>J49</td>
+<td>軍師</td>
+<td>composite</td>
+<td>戦詩人 + 錬金術師</td>
+<td>PBA, PBD, PHS, PHG / DU, HE</td>
+</tr>
+<tr>
+<td>J50</td>
+<td>修羅</td>
+<td>composite</td>
+<td>狂戦士 + 拳聖</td>
+<td>PS, PA, PX, PH / CR, HP</td>
+</tr>
+</tbody>
+</table></div>
+<h2>魔法名</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>第1段階</th>
+<th>第2段階</th>
+<th>第3段階</th>
+<th>第4段階</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>火</td>
+<td>フレイラ</td>
+<td>フレイザ</td>
+<td>ブレイゼル</td>
+<td>ブレイザード</td>
+</tr>
+<tr>
+<td>風</td>
+<td>ゲイラ</td>
+<td>ゲイラス</td>
+<td>テンペラ</td>
+<td>テンペリオン</td>
+</tr>
+<tr>
+<td>水</td>
+<td>アクエル</td>
+<td>アクエリア</td>
+<td>ストリミア</td>
+<td>ストリムゼア</td>
+</tr>
+<tr>
+<td>雷</td>
+<td>スパル</td>
+<td>スパルガ</td>
+<td>ヴォルテラ</td>
+<td>ヴォルテリオン</td>
+</tr>
+<tr>
+<td>氷</td>
+<td>フロシア</td>
+<td>フロシエル</td>
+<td>グレイシル</td>
+<td>グレイシオン</td>
+</tr>
+<tr>
+<td>土</td>
+<td>アスラ</td>
+<td>アスレア</td>
+<td>クエイラ</td>
+<td>クエイグラム</td>
+</tr>
+<tr>
+<td>光</td>
+<td>レイナ</td>
+<td>レイニア</td>
+<td>ルミネル</td>
+<td>ルミナシオン</td>
+</tr>
+<tr>
+<td>闇</td>
+<td>シェドラ</td>
+<td>シェドリア</td>
+<td>アビゼル</td>
+<td>アビスレイド</td>
+</tr>
+</tbody>
+</table></div>
+</section><section id="section-2"><h1>データモデル・整合性設計</h1>
+<p>設計補足 v0.1.1 / 2026-09-13。Repositoryの基本設計・API・詳細設計と合わせて使用する。DDLの実行結果ではなく、実装契約である。</p>
+<h2>1. 型と所有権</h2>
+<p>PostgreSQLを唯一の永続状態の正本とする。ゲームのアイテム・通貨をSteam Inventoryにも同時に所有させる構成は採用しない。IDはサーバー発行UUID、SteamIDは十進数文字列（UInt64範囲）、金額はbigint、UTC時刻はtimestamptz、楽観ロック用versionはbigint。</p>
+<p>帳簿は追記型。経済データを消去・上書きして履歴の参照を壊さない。退会時の表示名の削除と、整合性を保つ取引履歴の保持は別処理とし、保存方針は公開前に確認する。</p>
+<h2>2. エンティティと制約</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>テーブル</th>
+<th>主要列</th>
+<th>不変条件・索引</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>accounts</td>
+<td>id, steam_id, status, cooldown_until, version</td>
+<td>steam_id一意。出撃制限はキャラやセッションではなくアカウントに保存</td>
+</tr>
+<tr>
+<td>sessions</td>
+<td>id, account_id, token_hash, expires_at, revoked_at</td>
+<td>生のtokenやSteamチケットを保存しない。token_hash一意</td>
+</tr>
+<tr>
+<td>characters</td>
+<td>id, account_id, world_id, name, level, exp, current_job_id, version</td>
+<td>account_id一意、キャラLv1〜100、EXP非負</td>
+</tr>
+<tr>
+<td>job_progress</td>
+<td>character_id, job_id, level, exp, mastered_at</td>
+<td>複合主キー。職Lv1〜50。到達済みmastered_atを転職で消さない</td>
+</tr>
+<tr>
+<td>job_unlocks</td>
+<td>character_id, job_id, unlocked_at, rule_version</td>
+<td>複合主キー。解放時点の前提ルールを記録</td>
+</tr>
+<tr>
+<td>builds</td>
+<td>character_id, job_id, stat_allocation, skill_ranks, ai_rules, active_gear_skills, version</td>
+<td>複合主キー。JSONスキーマ・配分予算・職外スキルをサーバー検証</td>
+</tr>
+<tr>
+<td>wallets</td>
+<td>account_id, currency, balance, reserved, version</td>
+<td>0≦reserved≦balance≦9×10^15。利用可能額はbalance-reserved</td>
+</tr>
+<tr>
+<td>items</td>
+<td>id, owner_id, template_id, item_level, rarity, rolls, innate_grants, socket_count, binding, bound_owner_id, location, reservation_kind, reservation_id, version, grant_id</td>
+<td>BOUNDはbound_owner_id=owner_id。TRADEABLEはbound_owner_idが空。予約は1品1つ</td>
+</tr>
+<tr>
+<td>item_sockets</td>
+<td>item_id, socket_index, skill_id, points, consumed_accessory_id</td>
+<td>item_id/socket_index主キー。indexは0〜socket_count-1、point1〜4</td>
+</tr>
+<tr>
+<td>equipment</td>
+<td>character_id, slot, item_id</td>
+<td>character_id/slot主キー、item_id一意、slotは指定5部位</td>
+</tr>
+<tr>
+<td>material_stacks</td>
+<td>id, owner_id, material_id, purity, binding, quantity, reserved, version</td>
+<td>0≦reserved≦quantity≦9999。本人専用と交換可能の素材は別スタック</td>
+</tr>
+<tr>
+<td>capacity_reservations</td>
+<td>id, character_id, kind, reference_id, slots, expires_at</td>
+<td>kind/reference/character一意。箱の現品数と予約数の合計が上限以下</td>
+</tr>
+<tr>
+<td>expeditions</td>
+<td>id, party_id, world_id, dungeon_id, difficulty, status, starts_at, expires_at, plan, content_version, version</td>
+<td>期限は開始から8時間以内。作戦とVersionを開始時に固定</td>
+</tr>
+<tr>
+<td>expedition_members</td>
+<td>expedition_id, account_id, character_id, squad, snapshot, active</td>
+<td>expedition/character主キー。activeのaccount_idは一意</td>
+</tr>
+<tr>
+<td>runs</td>
+<td>id, expedition_id, run_index, status, current_room, started_at, ended_at</td>
+<td>expedition/run_index一意</td>
+</tr>
+<tr>
+<td>combat_checkpoints</td>
+<td>run_id, version, sim_ms, state, random_counters, lease_token</td>
+<td>run_id主キー。状態と乱数位置を同時保存</td>
+</tr>
+<tr>
+<td>reward_grants</td>
+<td>id, run_id, room_index, recipient_id, ordinal, payload, status</td>
+<td>run/room/recipient/ordinal一意。同じ報酬を再発行しない</td>
+</tr>
+<tr>
+<td>pity_counters</td>
+<td>account_id, difficulty, target_rarity, miss_count, version</td>
+<td>複合主キー、miss_count非負</td>
+</tr>
+<tr>
+<td>operations</td>
+<td>id, account_id, idempotency_key, request_hash, kind, status, receipt</td>
+<td>account/idempotency_key一意。同じキーで内容違いは拒否</td>
+</tr>
+<tr>
+<td>syntheses</td>
+<td>id, operation_id, equipment_id, accessory_id, socket_index, before_version, after_version, gold_cost, material_cost</td>
+<td>operation_idとaccessory_idがそれぞれ一意</td>
+</tr>
+<tr>
+<td>trades</td>
+<td>id, world_id, account_a, account_b, status, offer_version, offer_hash, expires_at, version</td>
+<td>同一アカウント同士を拒否</td>
+</tr>
+<tr>
+<td>trade_offers</td>
+<td>trade_id, account_id, gold, confirmed_version</td>
+<td>複合主キー。提示変更時に双方同意を解除</td>
+</tr>
+<tr>
+<td>trade_items</td>
+<td>trade_id, item_id, offered_by</td>
+<td>itemsの予約がこのtradeを指すことを確定時に検証</td>
+</tr>
+<tr>
+<td>market_listings</td>
+<td>id, seller_id, item_id, price, listing_fee, status, buyer_id, expires_at, version</td>
+<td>ACTIVEのitem_id一意。価格1〜10^9G。status/price/id索引</td>
+</tr>
+<tr>
+<td>ledger_transactions</td>
+<td>id, operation_id, reason, currency, created_at</td>
+<td>確定後は追記だけ。操作内の連番と組み合わせて一意</td>
+</tr>
+<tr>
+<td>ledger_entries</td>
+<td>id, transaction_id, owner_type, owner_id, amount</td>
+<td>通貨ごとに取引の総和0。発行/焼却もシステム口座へ記録</td>
+</tr>
+<tr>
+<td>item_events</td>
+<td>id, item_id, operation_id, event_type, before_owner, after_owner, metadata</td>
+<td>生成・移動・予約・合成・消費を追跡。item/time索引</td>
+</tr>
+<tr>
+<td>parties</td>
+<td>id, leader_id, status, plan_version, plan, version</td>
+<td>編成・作戦変更は権限確認</td>
+</tr>
+<tr>
+<td>party_members</td>
+<td>party_id, character_id, squad, ready_version, left_at</td>
+<td>在籍中character_id一意。通常4人/レイド12人</td>
+</tr>
+<tr>
+<td>guilds</td>
+<td>id, world_id, name, master_id, version</td>
+<td>同worldの正規化名は一意</td>
+</tr>
+<tr>
+<td>guild_members</td>
+<td>guild_id, character_id, role, joined_at</td>
+<td>character_id一意、最大50人</td>
+</tr>
+<tr>
+<td>blocks</td>
+<td>account_id, target_id</td>
+<td>複合主キー。自己ブロック拒否</td>
+</tr>
+<tr>
+<td>chat_messages</td>
+<td>id, channel_id, sender_id, body, created_at</td>
+<td>channel/time/id索引。表示名・権限を送信者入力から採用しない</td>
+</tr>
+<tr>
+<td>reports</td>
+<td>id, reporter_id, target_id, reason, status, evidence_refs</td>
+<td>通報対象の証跡を別保存</td>
+</tr>
+<tr>
+<td>quest_progress</td>
+<td>account_id, quest_id, progress, completed_at, reward_operation_id</td>
+<td>複合主キー。初回報酬は一度だけ</td>
+</tr>
+<tr>
+<td>content_versions</td>
+<td>version, sha256, schema_version, status, released_at</td>
+<td>version主キー。使用中データを上書きしない</td>
+</tr>
+<tr>
+<td>job_queue</td>
+<td>id, kind, aggregate_id, next_at, lease_until, lease_token, attempts, status</td>
+<td>kind/aggregate一意、status/next_at索引</td>
+</tr>
+<tr>
+<td>outbox</td>
+<td>id, aggregate_id, event_type, payload, published_at, attempts</td>
+<td>未送信のcreated_at索引</td>
+</tr>
+<tr>
+<td>admin_audit</td>
+<td>id, actor_id, action, reason, target_id, before_hash, after_hash, time</td>
+<td>運営操作の追記記録</td>
+</tr>
+</tbody>
+</table></div>
+<p>Foreign Keyは実装時のマイグレーションで全参照へ設定する。複数表にまたがる所有者一致・人数上限・点数合計はサービス内検証だけでなく、共通の更新経路と競合試験で守る。</p>
+<h2>3. 予約を一元化する理由</h2>
+<p>出撃、直接交換、出品が別の予約表だけを見ると、同じ品が複数用途に予約されるおそれがある。本案ではitemsのreservation_kind/reservation_idを最終的な共通状態とする。空き→予約の遷移は品の行ロック内で行い、空き以外から別の予約へ直接変えない。</p>
+<p>reservation_kindはNONE/EXPEDITION/TRADE/MARKET。誤消費防止のユーザー保護ロックは別のboolean。locationはBAG/WAREHOUSE/EQUIPPED/REWARD_INBOX/TRADE_ESCROW/MARKET_ESCROW/CONSUMED。binding・場所・予約・保護を混同しない。</p>
+<h2>4. ロック順序</h2>
+<p>全更新で、account ID昇順 → character ID昇順 → party/expedition → item ID昇順 → wallet/material ID昇順 → trade/listing → reward/ledger/operation、の順で取得する。</p>
+<p>事前読取は対象IDの特定に使用できるが、最終取得後にVersionと前提を再確認する。READ COMMITTEDと必要行へのFOR UPDATEを基本とし、一意制約を最終防壁にする。より強い分離が必要な集計だけSERIALIZABLEを検討する。行ロック・待機・デッドロックの挙動はPostgreSQL公式仕様に従う。[S07]</p>
+<p>デッドロック/直列化競合は同じ操作IDで最大3回、短いランダム待機を挟み再試行。プレイヤーへの二重課金を避けるため新しいIDに変更しない。</p>
+<p>ワーカーのlease取得と戦闘計算を分ける。計算中にDBの行ロックを保持しない。保存時にlease_tokenとversionを再検証し、古いワーカーの結果を拒否する。</p>
+<h2>5. 合成の確定処理</h2>
+<p>① 操作IDの既存receiptを確認する。② アカウント・キャラ・装備・アクセサリー・財布・素材を順にロックする。③ 見積期限60秒、所有者、Version、予約なし、保護なし、ソケット適合、残高を再検証する。④ アクセサリーを消費し、ソケットを更新し、装備を永久に本人専用へ変更する。⑤ 費用、履歴、receipt、outboxを同じDB取引に保存する。⑥ コミット後に通知する。</p>
+<p>途中の例外は全変更を取り消す。コミット後の通知失敗では取り消さず、同じ操作IDで結果を返す。見積もりは予約ではないので、見積後に売却された品は確定時に拒否する。</p>
+<h2>6. 直接交換・取引所</h2>
+<p>交換の提示ゴールドはreservedに積む。確定でbalanceとreservedを同時に減らし、相手口座へ増加する。取消ではreservedだけを解放する。</p>
+<p>市場購入は買い手の利用可能額を検証し、代金引落・売り手受取・手数料焼却・所有者移転・受取枠変換・出品SOLD・receipt・outboxを同じ取引で確定する。売り手への入金を後続の別APIへ委ねない。</p>
+<p>商品の受取枠は出品時から返却用を予約する。売買成立時に売り手の返却予約を解放し、買い手の受取枠を現品へ変換する。購入直前に買い手の空きをロック内で検証する。</p>
+<h2>7. コンテンツの入力契約</h2>
+<p>JobDefはid/tier/requirements/profile/allowed_weapons/identity_effect/active_skill_ids[4]/passive_skill_ids[2]。
+SkillDefはid/job_id/kind/program/element/max_rank=20/evolution_ranks=[1,5,10,20]/stage_names[4]/coefficients_bp[4]/mp_costs[4]/cooldown_ms/effect_group/target_rule。
+DungeonDefはid/level/unlock_requirements/rooms/difficulty_weights/enemies/reward_rules/time_limits。</p>
+<p>AIルールはpriority0〜7、skill_id、condition_code、operator、threshold、target_code、stage_mode、reserve_mp_percent0〜100。任意スクリプトは入力させない。</p>
+<p>全参照、一意ID、解放の循環、点数予算、抽選行の合計、由来限定スキル、数値上限を読み込み時に検証し、失敗したコンテンツVersionを有効化しない。</p>
+</section><section id="section-3"><h1>画面・操作・ドット絵設計</h1>
+<h2>1. 基準</h2>
+<p>仮決定は、街を見下ろし、戦闘を左右対面のドット絵にする。描画基準640×360、UI基準1280×720。整数倍率のnearest-neighbor拡大を基本に、文字は別レイヤーで拡大できるようにする。余った領域は余白・情報パネルに使い、ドットを不均一に伸ばさない。</p>
+<p>キャラクター48×48、タイル32×32、アイコン32×32、ボス96〜192pxを制作初期値とする。職は色だけでなく武器・帽子・輪郭で区別する。今回は設計書であり完成ゲーム画面や完成アートではない。</p>
+<h2>2. 画面遷移</h2>
+<p>タイトル → Steam接続 → 拠点 → 職業/ポイント/装備/工房 → ダンジョン → 作戦確認 → 出撃 → 戦闘観戦 → 結果/受取 → 拠点。</p>
+<p>拠点から取引所・直接交換・ギルドへ遷移できる。出撃中でもログ・図鑑・設定は見られる。現在の戦闘に使用する装備や職は変更できず、育成画面の編集は次回用下書きとして区別する。</p>
+<h2>3. 画面仕様</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>画面</th>
+<th>主な情報・操作</th>
+<th>空/エラー/待機状態</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UI01</td>
+<td>タイトル/接続</td>
+<td>タイトル、Steam接続、バージョン、更新</td>
+<td>Steam未起動、所有確認失敗、メンテ、再試行</td>
+</tr>
+<tr>
+<td>UI02</td>
+<td>拠点</td>
+<td>街、現在職、Lv、資産要約、出撃状態、残時間</td>
+<td>初回案内、出撃制限の終了時刻</td>
+</tr>
+<tr>
+<td>UI03</td>
+<td>職業図鑑</td>
+<td>50職、役割/武器フィルタ、前提グラフ、転職比較</td>
+<td>未解放は必要な職とLvの不足を表示</td>
+</tr>
+<tr>
+<td>UI04</td>
+<td>ポイント</td>
+<td>6能力、6固定系統、未使用点、進化閾値</td>
+<td>予算不足、未保存、現在用/次回用の区別</td>
+</tr>
+<tr>
+<td>UI05</td>
+<td>装備/バッグ</td>
+<td>5部位、比較、初期効果、ソケット、予約、保護</td>
+<td>満杯、出撃中、本人専用、比較対象なし</td>
+</tr>
+<tr>
+<td>UI06</td>
+<td>工房</td>
+<td>装備・ソケット・アクセサリー、費用、前後差分</td>
+<td>適合外、費用不足、見積切れ、Version競合</td>
+</tr>
+<tr>
+<td>UI07</td>
+<td>ダンジョン</td>
+<td>12地域、6難易度、属性耐性、仕組み、ドロップ</td>
+<td>未解放、必要Lv、天井残数、役割不足の警告</td>
+</tr>
+<tr>
+<td>UI08</td>
+<td>作戦/募集</td>
+<td>4枠または3隊、8AIルール、停止条件、時間</td>
+<td>未同意、満員、空き箱不足、参加資格不足</td>
+</tr>
+<tr>
+<td>UI09</td>
+<td>戦闘観戦</td>
+<td>HP/MP、詠唱、CD、効果、戦闘イベント</td>
+<td>切断、同期遅延、観戦権限なし</td>
+</tr>
+<tr>
+<td>UI10</td>
+<td>結果/受取</td>
+<td>周回数、EXP/JEXP/G、品、全滅理由</td>
+<td>受取先満杯、精算待ち、残り制限時間</td>
+</tr>
+<tr>
+<td>UI11</td>
+<td>直接交換</td>
+<td>双方10品+G、提示内容、確認状態</td>
+<td>相手の変更で確認解除、切断、期限切れ</td>
+</tr>
+<tr>
+<td>UI12</td>
+<td>取引所</td>
+<td>武器/レア/初期技能/ソケット検索、出品、購入</td>
+<td>該当なし、売切れ、残高不足、枠上限</td>
+</tr>
+<tr>
+<td>UI13</td>
+<td>ギルド/交流</td>
+<td>メンバー、役職、告知、共同目標、チャット</td>
+<td>権限不足、投稿制限、ブロック</td>
+</tr>
+<tr>
+<td>UI14</td>
+<td>図鑑/ログ</td>
+<td>敵、耐性、技、装備の由来、行動しない理由</td>
+<td>未遭遇、ログ保存期限、再取得</td>
+</tr>
+<tr>
+<td>UI15</td>
+<td>設定</td>
+<td>音量、文字拡大、色補助、減光、操作</td>
+<td>保存失敗時は既存設定を保持</td>
+</tr>
+</tbody>
+</table></div>
+<h2>4. レイアウト</h2>
+<p>上段に現在画面・主要メニュー・資産・接続状態。左にキャラと装備、中央に街または戦闘、右にパーティーと作戦、下段にログ/チャットと出撃操作を置く。狭い画面は左右をタブ化する。</p>
+<p>画面を閉じても冒険が続くこと、ネット接続が必要な操作と表示だけの画面を区別する。再接続中は古いHPを最新値のように表示せず、最後に同期した時刻を付ける。</p>
+<h2>5. 職業・スキル</h2>
+<p>職業カードには階級より役割を目立たせる。「単体物理耐久」「低HPの緊急回復」「継続回復」などの説明を付ける。前提条件は色だけでなく「50/50 達成」「42/50」を表示する。</p>
+<p>スキルは4能動+2受動を分離し、Rank1/5/10/20の節点を表示する。ポイントは下書きで操作し、保存時にサーバー検証。下位段階を使用してMPを節約できることも示す。</p>
+<p>装備スキルは別タブで3/6/10点の閾値、発動中最大4系統、各装備からの点数を表示。初期限定・アクセサリー限定・両対応を文字で区別する。</p>
+<h2>6. 合成・交換の確認</h2>
+<p>合成ボタンには費用を明記する。確認画面で「合成後、この装備は他プレイヤーへ渡せない」「上書き前のアクセサリーは戻らない」を表示する。能力・技能点の増減も表示し、良い変化だけを示さない。</p>
+<p>直接交換は相手が提示内容を変えた瞬間に双方確認を解除。チャットに書いた内容ではなく、サーバーが保存した提示内容だけを正式な交換対象とする。</p>
+<h2>7. 戦闘の納得感</h2>
+<p>MP不足、免疫、回復不要、優先条件不成立など、技を使わなかった理由を直近の詳細ログで見られるようにする。通常画面はダメージと重要状態を中心にし、必要時だけ展開する。</p>
+<p>全滅時は倒れた順、主な被ダメージ属性、MP推移、回復量を表示する。実測イベントにない敗因や「次は必ず勝てる」という説明は作らない。</p>
+<h2>8. アセット・アクセシビリティ</h2>
+<p>必要アセットは50職外見、16武器種、12背景、通常敵の共通素体、12ボス、5部位装備、20装備スキル、8属性×4段階の魔法、音・状態アイコン。最初は4職1地域で待機/歩行/攻撃/詠唱/被弾/KOを完成し、共通素体へ職別レイヤーを載せる。</p>
+<p>文字拡大100〜200%、キーボードフォーカス、パッド操作、点滅/揺れ軽減、BGM/SE個別音量、レアの色+名称+枠模様を用意する。素材・フォント・音源はライセンス台帳を持つ。</p>
+</section><section id="section-4"><h1>境界条件・レビューでの修正</h1>
+<p>設計補足 v0.1.1。この資料はRepositoryに保存したv0.1の曖昧さを解消する。現時点ではRepository未反映であり、統合後は各元文書へ反映して重複する正本を残さない。</p>
+<h2>1. 全滅後300秒の起点</h2>
+<p>対象位置: REQUIREMENTS FR20、DETAILED_DESIGN 8〜9章。</p>
+<p><strong>修正前</strong>: 全滅処理時のserver_now+300秒。</p>
+<p><strong>修正後</strong>: <code>wipe_at = expedition.starts_at + wipe_event.sim_ms</code>、<code>cooldown_until = max(既存値, wipe_at + 300秒)</code>。新規出撃は、アカウントの未精算イベントを現在時刻まで反映してから判定する。</p>
+<p>理由: 離席分の追いつき処理で過去の全滅を発見したとき、ログインした瞬間からさらに5分待たせないため。基準は端末時計ではなくサーバーのイベント時刻である。</p>
+<p>例: 12:00全滅、12:20に復帰なら制限は12:05に終了済み。12:03に復帰なら残り2分。全滅から299999msは不可、300000msは可。</p>
+<h2>2. 時間の量子化</h2>
+<p>対象位置: DETAILED_DESIGNの行動間隔式と100ms時刻契約。</p>
+<p><strong>修正前</strong>: 速度計算後の任意の整数msと、100ms単位の処理が混在。</p>
+<p><strong>修正後</strong>: 全ての予定時刻の差分は、能力補正と最短間隔の適用後に<code>100 * ceil(ms / 100)</code>へ切り上げる。800msの最低間隔は維持する。詠唱、CD、効果持続、移動、消耗品CDも同じ処理。</p>
+<p>理由: 高速化で過剰な行動回数を与えず、まとめ処理と細分処理の境界を一致させるため。</p>
+<h2>3. 戦闘と周回の境界</h2>
+<p>battleは1ルーム、runは通常4ルーム+ボス1ルーム、expeditionは8時間までの反復指示。</p>
+<p>HP/MPはルームをまたいで維持。ルーム勝利後、KOの味方は次ルーム開始時にHP20%で復帰し、MPはKO時点の値を保持する。全員KOはこの復帰より先に全滅判定となる。次周回開始時は街帰還扱いで全員HP/MP全回復。</p>
+<p>召喚、盾、DoT、HoT、能力強化/弱体はルーム終了時に解除。CDは共通の論理時間上で継続し、移動5秒の経過も含める。スキルMVの蘇生制限は1ルーム1人1回。装備G01の致死耐えは1周回1回で、ルームをまたいでも復活しない。</p>
+<h2>4. 出撃予約と直前操作</h2>
+<p>出撃開始では参加アカウントと使用品・消耗品を予約し、全員分を同時に確定する。取引中、他の出撃中、合成対象、受取枠不足のメンバーがいれば誰も出撃しない。</p>
+<p>同一アカウントの新しい指示を受理する前に旧指示を終了・精算する。古いワーカーが新しい指示の品やcooldownへ後から書き込まないよう、expedition ID、lease、versionを検証する。</p>
+<h2>5. 8時間の最終時刻</h2>
+<p>期限と同時刻までの詠唱完了・ダメージ・KO・ルーム完了を解決し、その後に終了する。期限と同時刻に新しい行動・ルーム・周回を開始しない。同時刻に全滅した場合は、期限終了で隠さず全滅として扱う。</p>
+<h2>6. 乱数の再現契約</h2>
+<p>v0.1.1の設計案は、サーバーの暗号学的乱数から32バイトの秘密鍵を生成し、HMAC-SHA256で用途別・連番別の決定的な乱数を得る方式とする。クライアントへ鍵を渡さない。実装時に固定ベクトルと負荷を検証し、方式を変える場合はcombat_versionを上げる。</p>
+<p>メッセージはASCIIで<code>v1|stream|expedition-id|run-index|room-index|counter</code>、streamはhit/crit/variance/drop/gear/pityに固定。UUIDは小文字ハイフン付き、整数は符号なし十進表記、余分な空白なし。digestの先頭8バイトをbig-endian unsigned64として読む。</p>
+<p>整数範囲[a,b]はn=b-a+1、limit=floor(2^64/n)*nとし、x&gt;=limitならcounterを進めて再試行、採用時はa+(x mod n)。単純な剰余だけで偏りを作らない。乱数counterを各チェックポイントへ保存する。</p>
+<p>この方式の具体コードと暗号APIは実装対象であり、この資料で性能・正しい実装を保証したものではない。</p>
+<h2>7. その他の表記修正</h2>
+<p>SKILLSの参照語数は自然ページが12語、光闇ページが4語。旧文書の「自然ページ16語」は数え間違い。</p>
+<p>J31のA2は効果プログラムPB（出血）なので「毒刃」を「裂傷刃」へ変更する。数値・出血の効果は変更しない。</p>
+<p>全体支援は通常4人・レイドでも所属4人隊まで。市場価格・合成費・天井回数・職業係数は試験前の初期値であり、すでに最適化済みではない。</p>
+</section><section id="section-5"><h1>コンテンツ補足・初回体験・ボス行動</h1>
+<p>以下はv1の仮決定。Repositoryの職業・スキル・ダンジョン定義を置き換えるものではなく、未定義だった開始条件と消耗品・敵行動を補う。</p>
+<h2>1. 初回体験</h2>
+<p>キャラ作成は1アカウントにつき1活動キャラ。名称は2〜12文字、表示用文字列と検索用正規化を分離する。作成時に初級20職から選び、おすすめは戦士・白魔法使い・黒魔法使い・僧侶の4職。</p>
+<p>支給品は選択職に対応した練習武器と防具4点、包帯5個、小マナ薬5個、100G。支給品は本人専用、売価0、分解不可。無料支給品をドロップ品とは区別する。初期職を変えたときは未支給の武器種に限り練習武器を一度だけ支給する。これにより武器制限で初回転職が詰まらない。</p>
+<p>チュートリアルは表示・ポイント下書き・NPC編成・1周出撃・受取・装備比較・合成・転職図鑑の順。合成の練習用アクセサリーと霊粉は専用品を使い、試したくないプレイヤーには後回しを許可する。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>クエスト</th>
+<th>完了条件</th>
+<th>一度だけの報酬</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Q01 冒険者登録</td>
+<td>キャラクター作成</td>
+<td>上記支給品と100G</td>
+</tr>
+<tr>
+<td>Q02 作戦の準備</td>
+<td>ポイントを保存し、AIルールを確認</td>
+<td>包帯3個（本人専用）</td>
+</tr>
+<tr>
+<td>Q03 街道の踏破</td>
+<td>DNG01 NORMALを1回クリア</td>
+<td>200G、練習用合成装備1個、アクセサリー1個、合成分の専用霊粉</td>
+</tr>
+<tr>
+<td>Q04 工房の使い方</td>
+<td>任意の練習用合成を1回実行</td>
+<td>称号「工房見習い」</td>
+</tr>
+<tr>
+<td>Q05 次の道</td>
+<td>職業図鑑で前提と武器を確認</td>
+<td>プロフィールの紋章1個</td>
+</tr>
+<tr>
+<td>Q06 仲間と歩く</td>
+<td>他プレイヤーと1周クリア</td>
+<td>称号「同行者」</td>
+</tr>
+</tbody>
+</table></div>
+<p>クエスト報酬はaccount_id/quest_id一意のoperationで付与する。クリックや再接続の回数で再取得できない。初回クエスト以外の反復クエストはv1の必須仕様に増やさない。</p>
+<h2>2. 消耗品</h2>
+<p>消耗品はスキルではなく物品使用。MPは消費しない。オート作戦で使用条件を指定し、1キャラあたり出撃指示中最大12個、1周最大4個を予約する。物品使用の共通CD30秒、1アクションを使用し、GCD1秒。行動不能中には使えない。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>品名</th>
+<th>対象・効果</th>
+<th>NPC販売価格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C01</td>
+<td>包帯</td>
+<td>本人HPを最大HPの15%回復</td>
+<td>30G</td>
+</tr>
+<tr>
+<td>C02</td>
+<td>治療薬</td>
+<td>本人HPを最大HPの30%回復</td>
+<td>80G</td>
+</tr>
+<tr>
+<td>C03</td>
+<td>小マナ薬</td>
+<td>本人MPを最大MPの15%回復</td>
+<td>40G</td>
+</tr>
+<tr>
+<td>C04</td>
+<td>マナ薬</td>
+<td>本人MPを最大MPの30%回復</td>
+<td>120G</td>
+</tr>
+<tr>
+<td>C05</td>
+<td>解毒薬</td>
+<td>本人の毒1種解除</td>
+<td>30G</td>
+</tr>
+<tr>
+<td>C06</td>
+<td>清声薬</td>
+<td>本人の沈黙解除</td>
+<td>60G</td>
+</tr>
+</tbody>
+</table></div>
+<p>NPC販売品は本人専用、売価0。通常素材やドロップアクセサリーをNPC販売で無制限に生成する機能は設けない。消耗品の効果を商人が強化する場合も、回復上限は対象の不足量。出撃終了で未使用の予約を解除し、使用した個数だけを消費する。</p>
+<p>能力技の治療は物理/魔法のMP表を使い、消耗品と混同しない。MP薬の消費条件は本人MP20%以下を初期プリセットにする。アイテム枯渇時はスキルAIに戻り、存在しない品を再消費しない。</p>
+<h2>3. 通常敵の構成</h2>
+<p>各ダンジョンの4通常ルームは、1:近接3、2:近接2+術者1、3:近接1+支援1+遠隔1、4:精鋭1+近接2。テンプレート補正は近接=基準、術者=HP0.8/魔攻1.2/物防0.8、支援=HP0.9/魔攻0.8/魔防1.2、遠隔=HP0.9/物攻1.1、精鋭=HP1.8/攻撃1.1。</p>
+<p>基準値と難易度倍率はWORLD_MMOを使用する。通常敵の技は単体PSまたは属性E、支援はHP50%未満の味方へMHをCD12秒で使用。精鋭はPAをCD15秒。難易度を上げても予告時間を0にはしない。</p>
+<h2>4. ボスの行動定義</h2>
+<p>以下のMP消費も対応する能動技の表に従う。ボスのMP切れ時は通常攻撃へ戻る。敵専用の沈黙などは確率を明示する。初期係数はスキル段階2を基本とし、難易度はステータス倍率で変える。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ダンジョン</th>
+<th>周期・優先条件</th>
+<th>HP50%以下の変化</th>
+<th>攻略上の役割</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DNG01</td>
+<td>単体PSを8秒ごと、PAを20秒ごと・予告3秒</td>
+<td>PA間隔18秒</td>
+<td>挑発、物理防御、基本回復</td>
+</tr>
+<tr>
+<td>DNG02</td>
+<td>後列の敵を優先するPSを10秒、風EAを20秒・予告3秒</td>
+<td>同じ隊の最もHP比率が高い者を後列候補から選ぶ</td>
+<td>後列保護、弓の集中、火弱点</td>
+</tr>
+<tr>
+<td>DNG03</td>
+<td>水Eを8秒、毒MDPを18秒</td>
+<td>自己HoT（MRの単体版）を30秒</td>
+<td>解除と敵強化解除、雷弱点</td>
+</tr>
+<tr>
+<td>DNG04</td>
+<td>火Eを8秒、火EAを20秒・予告3秒</td>
+<td>火EAに火傷の付与判定を段階3で追加</td>
+<td>継続回復、火耐性、水攻撃</td>
+</tr>
+<tr>
+<td>DNG05</td>
+<td>雷Eを8秒、単体沈黙を24秒・予告3秒</td>
+<td>沈黙対象を術者優先にする</td>
+<td>物理の手当、清声薬、土攻撃</td>
+</tr>
+<tr>
+<td>DNG06</td>
+<td>氷Eを8秒、MSLを20秒</td>
+<td>自己防御+15%を10秒、CD25秒</td>
+<td>解除、貫通、火攻撃</td>
+</tr>
+<tr>
+<td>DNG07</td>
+<td>物防は基準の1.5倍、PSを8秒、PAを20秒</td>
+<td>PGを25秒</td>
+<td>魔法か防御貫通、風攻撃</td>
+</tr>
+<tr>
+<td>DNG08</td>
+<td>闇Eを8秒、MDWを18秒</td>
+<td>MDPを24秒</td>
+<td>解除、緊急回復、光攻撃</td>
+</tr>
+<tr>
+<td>DNG09</td>
+<td>魔防は基準の1.5倍、光Eを8秒、MDSを20秒</td>
+<td>物理PSを12秒で追加</td>
+<td>物理火力、強化依存の抑制、闇攻撃</td>
+</tr>
+<tr>
+<td>DNG10</td>
+<td>炎竜は火E、氷竜は氷Eを各10秒。各EAを25秒・予告3秒</td>
+<td>片方KO後、生存側の与ダメージ+15%</td>
+<td>単体集中と属性別対策</td>
+</tr>
+<tr>
+<td>DNG11</td>
+<td>闇Eを10秒、隊への沈黙4秒を30秒・予告4秒</td>
+<td>沈黙間隔25秒</td>
+<td>通常攻撃、MP管理、物理治療</td>
+</tr>
+<tr>
+<td>DNG12</td>
+<td>隊ごとに下記の異なる守護者を担当</td>
+<td>各守護者が役割対応技を1つ増やす</td>
+<td>3隊の役割分担</td>
+</tr>
+</tbody>
+</table></div>
+<p>単体沈黙は命中後100%の基礎付与、対象の状態耐性で持続を減らす。DNG11は隊全員に同時付与し、回避・命中判定は設けない代わりに4秒の予告を表示する。敵のMP不足・CD中には詠唱を開始しない。</p>
+<p>DNG12は、A隊=物理守護者（単体PS8秒/PA20秒、半分以下でPT12秒）、B隊=災厄守護者（闇E8秒/MDP18秒、半分以下でMDW24秒）、C隊=結界守護者（光E8秒/MS25秒、半分以下でMDS20秒）。各隊が自分の最終ボスを倒すと完了旗を立て、3旗達成で棄王の封印解除を演出し、最終報酬を全員へ確定する。4つ目の未設計戦闘を暗黙に追加しない。</p>
+<p>先に倒した隊は他隊へ回復・攻撃を送らず観戦する。最終条件を未達成の隊が全滅した場合、最終目的が達成不能なのでレイドを失敗終了し全参加アカウントへ300秒を適用する。これはWORLD_MMOの「全員KOまたは時間切れ」に、目的達成不能による終了を補う規則である。中間ルーム報酬は失わない。</p>
+<h2>5. ギルド共同目標・実績</h2>
+<p>ギルド目標は週単位の共同クリア数を記録し、到達でギルドの掲示用紋章を解放する。物理/魔法ダメージだけを貢献として数えない。加入以前のプレイを遡って計上せず、同じrunを重複計上しない。v1では共有通貨・共有品の付与を行わない。</p>
+<p>実績案は初出撃、初合成、初マスター、上級解放、基本20職マスター、全50職解放、仲間とクリア、レイド初クリアの8つ。Steamへの通知はDBで条件確定後に送信し、再送可能にする。実績通知失敗をゲーム報酬失敗にしない。</p>
+<h2>6. 初期ビルド例</h2>
+<p>以下は職Lv50の53点配分例であり、最適解の保証ではない。A1〜A4/P1〜P2はSKILLSの固定順序。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>職</th>
+<th>A1</th>
+<th>A2</th>
+<th>A3</th>
+<th>A4</th>
+<th>P1</th>
+<th>P2</th>
+<th>狙い</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>戦士</td>
+<td>20</td>
+<td>10</td>
+<td>10</td>
+<td>0</td>
+<td>8</td>
+<td>5</td>
+<td>通常攻撃特性を活かし、MP消費を抑えた継続火力</td>
+</tr>
+<tr>
+<td>白魔法使い</td>
+<td>20</td>
+<td>10</td>
+<td>5</td>
+<td>5</td>
+<td>10</td>
+<td>3</td>
+<td>単体緊急回復を主軸に、盾と最低限の蘇生</td>
+</tr>
+<tr>
+<td>黒魔法使い</td>
+<td>20</td>
+<td>10</td>
+<td>5</td>
+<td>5</td>
+<td>10</td>
+<td>3</td>
+<td>火主体、雷・氷・闇を残した属性対応</td>
+</tr>
+<tr>
+<td>僧侶</td>
+<td>20</td>
+<td>10</td>
+<td>5</td>
+<td>0</td>
+<td>10</td>
+<td>8</td>
+<td>継続回復、解除、MP回復の長期戦</td>
+</tr>
+</tbody>
+</table></div>
+<p>比較は同じ職Lv・キャラLv・装備予算・敵条件で行う。基本職を守るための目標と、実際にバランスが取れた証拠を混同しない。</p>
+</section><section id="section-6"><h1>運用・監視・検証設計</h1>
+<h2>1. 環境と容量</h2>
+<p>development/staging/productionでDB・設定・管理権限を分ける。サーバーとDBは1つの管理環境から始め、バックアップ保存先は故障領域を分離する。運営用ホストの契約先・予算はD01の確認事項で、契約済みではない。</p>
+<p>負荷は接続数CCUだけでなく、離席中を含む稼働冒険数E、1冒険のイベント率r、1イベントの計算時間t、保存間隔s、アイテム生成率gで見積もる。CPU負荷はE×r×t、チェックポイント書込みはE/s、品の増加はE×gが基本の計測軸。</p>
+<p>50/200/1000接続相当と、100/1000/5000稼働冒険のシナリオを分けて測定する。これは試験計画であり対応人数の保証ではない。費用は実測後にホスト・DB・転送・保存・監視の料金から算定する。</p>
+<h2>2. 目標とアラート</h2>
+<p>可用性99.5%/月、RPO5分以内、RTO60分以内を設計目標とする。SLAや達成実績ではない。</p>
+<p>監視はAPI p95、エラー率、active_connections、active_expeditions、simulation_lag、計算時間、DB待機、deadlock、queue_age、outbox_age、メモリ/GC、残容量、経済の整合性。</p>
+<p>初期アラートは5xx&gt;1%が5分、simulation_lag&gt;30秒が5分、outbox未送信&gt;60秒、DB空き20%未満、24時間バックアップ失敗、台帳不整合1件以上。台帳不整合が起きた場合は経済操作を停止し、記録を保全して原因を調査する。</p>
+<h2>3. 記録と安全性</h2>
+<p>ログはrequest_id、operation_id、内部account_id、expedition_id、run_id、grant_id、item_id、content_versionで追跡可能にする。生Steamチケット、token、秘密鍵は記録しない。</p>
+<p>通常ユーザーと運営管理者の認証・権限を分離。管理者は多要素認証を用い、補填・回収・利用停止には実行者、理由、対象、前後の記録を残す。ゲーム側では全ての対象IDに所有者・役割・worldの検証を行う。</p>
+<p>公式世界の品を端末保存とマージしない。ローカル試験用認証・報酬生成が本番設定で有効にならない検査を設ける。クライアントに報酬決定権を与えない設計を基本とし、外部のチート検知だけで複製防止を代替しない。</p>
+<h2>4. バックアップ・復旧</h2>
+<p>日次の基礎バックアップと継続WAL保存を候補とし、暗号化して本体とは別の保存先へ送る。日次7世代/週次4世代を初期案とする。実際の方式は運営予算確定後に選ぶ。</p>
+<p>復旧順は、新規出撃・経済操作停止 → DB復元 → schema/content整合 → lease失効 → 未精算run/outboxの冪等再開 → 台帳・所有者・同時出撃一意の検証 → 運営確認 → 再開。</p>
+<p>停止時間そのものを全滅に変換しない。復旧後の進行は指示開始から8時間までを上限に追いつく。全滅が過去の時刻に確定した場合の300秒は、再計算完了時ではなくサーバーが再現した全滅時刻から数える。EDGE_CASES.mdの時刻契約を優先する。</p>
+<p>補填は別の一意なoperation_idで行い、既に付与した報酬を再発行する方式にしない。復元訓練は実装後に実施する。</p>
+<h2>5. 更新と保持</h2>
+<p>開始時のcontent_versionを最大8時間の指示と未精算分に固定する。新しい調整値を既存戦闘へ途中投入しない。旧定義と互換ロジックを未精算分がなくなるまで保持する。</p>
+<p>DB変更は互換列追加→移行→旧列整理の順。公開ブランチmainへは配布・実行に必要なファイルだけを選別し、workの設計・Task・証跡を丸ごと公開用構成へ混ぜない。</p>
+<p>保持期間の仮案: チャット30日、通報証跡90日、戦闘詳細7日、戦闘要約90日、経済台帳365日以上。冪等判定に必要な薄いID記録は別途保持する。この期間を法的必須期間とは説明しない。利用地域と運営方針は公開前に確認する。</p>
+<h2>6. 受入試験</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>確認すること</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>QA01</td>
+<td>職50、初級20/上級20/複合10、一意ID、前提参照、循環なし</td>
+</tr>
+<tr>
+<td>QA02</td>
+<td>全職4能動+2受動、武器制限、職外スキル拒否</td>
+</tr>
+<tr>
+<td>QA03</td>
+<td>505能力点、53スキル点、Rank0/1/4/5/9/10/19/20、無料振り直し</td>
+</tr>
+<tr>
+<td>QA04</td>
+<td>基準375ダメージ、整数丸め、盾、吸収、かばう、属性</td>
+</tr>
+<tr>
+<td>QA05</td>
+<td>固定入力と乱数位置で同じ結果。細分Advanceと一括Advanceの一致</td>
+</tr>
+<tr>
+<td>QA06</td>
+<td>MP不足、免疫、全快、GCD、詠唱中止、DoT更新、発動の非再帰</td>
+</tr>
+<tr>
+<td>QA07</td>
+<td>全滅から299999ms拒否/300000ms許可。離席再計算でも追加300秒を付けない</td>
+</tr>
+<tr>
+<td>QA08</td>
+<td>難易度表の合計、許可外レア0、天井境界、初期/アクセサリー由来制限</td>
+</tr>
+<tr>
+<td>QA09</td>
+<td>合成前は交換可、合成後は永久不可、取り外しで解除不可、二重消費なし</td>
+</tr>
+<tr>
+<td>QA10</td>
+<td>同時購入/取消/合成/出撃で品の二重所有・負残高・二重予約なし</td>
+</tr>
+<tr>
+<td>QA11</td>
+<td>8時間期限、受取箱予約、ワーカー競合、切断、障害後の再精算</td>
+</tr>
+<tr>
+<td>QA12</td>
+<td>4人/12人、全員同意、リーダー切断、個人ドロップ、隊別支援範囲</td>
+</tr>
+<tr>
+<td>QA13</td>
+<td>文字拡大・色補助・パッド・フォーカス・不可逆操作の確認</td>
+</tr>
+<tr>
+<td>QA14</td>
+<td>初級20職それぞれの終盤採用理由を10種類の攻略条件で測定</td>
+</tr>
+<tr>
+<td>QA15</td>
+<td>Steam実チケット・所有確認・招待・配布ビルド・実績</td>
+</tr>
+<tr>
+<td>QA16</td>
+<td>負荷、アラート、バックアップ復元、Version混在、経済台帳</td>
+</tr>
+</tbody>
+</table></div>
+<p>設計値の静的検算と、ゲームの実動試験は分ける。この資料によりQA01〜16がすべて実行済みになったわけではない。</p>
+</section><section id="section-7"><h1>主要な設計判断</h1>
+<p>状態: 仮決定 / 2026-09-13。ユーザー指定以外の採否はOPEN_DECISIONSの回答で更新する。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>判断</th>
+<th>採用案</th>
+<th>理由</th>
+<th>代案と失うもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Steamとホスト</td>
+<td>Steamサービス+運営ゲームサーバー</td>
+<td>離席中の進行と交換経済を信頼できる処理へ集約</td>
+<td>プレイヤーホストは費用を抑えやすいが、ホスト改ざん・離脱・世界共通の所有権が課題</td>
+</tr>
+<tr>
+<td>MMO形式</td>
+<td>街/経済共有、戦闘4人/12人インスタンス</td>
+<td>放置と協力を両立し、敵の奪い合いを避ける</td>
+<td>シームレス大規模フィールドは空間共有が強いが、同期・混雑・報酬条件が増える</td>
+</tr>
+<tr>
+<td>職業</td>
+<td>全職同成長予算・持ち出せない固有特性</td>
+<td>初級を終盤まで使う理由を残す</td>
+<td>上級への単純な全能力上乗せは初級差別化の要件に反する</td>
+</tr>
+<tr>
+<td>経済</td>
+<td>PostgreSQLを唯一の所有権正本にする</td>
+<td>合成・通貨・交換を同一取引で確定</td>
+<td>Steam Inventory主導では対応する所有権/合成契約の再設計が必要</td>
+</tr>
+<tr>
+<td>離席</td>
+<td>オンラインと同じ決定的シミュレーター</td>
+<td>全滅・MP・装備差・報酬を同じ規則で評価</td>
+<td>時間×平均報酬は軽量だが、失敗やビルド差を正確には表せない</td>
+</tr>
+<tr>
+<td>構成</td>
+<td>モジュラーモノリス+DB</td>
+<td>初期の運用負担を抑え、境界だけを明確にする</td>
+<td>多数の独立サービスは運用・整合性の調整が先に増える</td>
+</tr>
+<tr>
+<td>実装順</td>
+<td>4職1地域の縦切り→全50職</td>
+<td>根幹の戦闘・経済が成立してから横展開</td>
+<td>50職を先に実装し切ると、計算基盤の変更が全コンテンツへ波及</td>
+</tr>
+</tbody>
+</table></div>
+<p>Steam Game Serversはゲームの専用サーバーを作るAPIであり、実行ホストは開発者等が用意する。SDRは通信中継であり、任意のゲーム処理・DBを置くホストの代用ではない。[S01][S02]</p>
+<p>これらの判断は外部ホスティングの契約・課金・本番公開を許可するものではない。</p>
+</section><section id="section-8"><h1>Task計画</h1>
+<p>2026-09-13。設計書の作成、Repositoryへの保存、ゲーム実装、実機検証を別の状態として管理する。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>状態</th>
+<th>目的/変更範囲</th>
+<th>依存（YA-省略）</th>
+<th>受入条件</th>
+<th>試験/証跡</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>YA-D00</td>
+<td>完了</td>
+<td>要件・基本設計・基幹詳細設計</td>
+<td>なし</td>
+<td>指定要件30件、50職、300系統、装備・経済・APIを定義</td>
+<td>設計表と参照の静的レビュー</td>
+</tr>
+<tr>
+<td>YA-D01</td>
+<td>作成完了／Repository未反映</td>
+<td>補足設計</td>
+<td>D00</td>
+<td>データ・UI・運用・境界条件・敵行動・初回体験を文書化</td>
+<td>このZIP内の該当文書</td>
+</tr>
+<tr>
+<td>YA-D02</td>
+<td>完了</td>
+<td>設計モデル検算</td>
+<td>D00,D01</td>
+<td>37/37の静的検算、修正点と未検証範囲を記録</td>
+<td>validation_report.json</td>
+</tr>
+<tr>
+<td>YA-D03</td>
+<td>保留</td>
+<td>補足文書のRepository統合</td>
+<td>D01,D02</td>
+<td>添付の版と差分を確認し、正本へ統合、参照切れを解消</td>
+<td>統合diffと文書参照検査。今回は一括書込み拒否で未反映</td>
+</tr>
+<tr>
+<td>YA-01</td>
+<td>Ready</td>
+<td>技術互換性とCombatの骨格</td>
+<td>D00</td>
+<td>Godot .NETとC#ライブラリの互換Versionを固定。純粋なAdvance契約とプロジェクト構成を作る</td>
+<td>ビルドと固定入力の最低限の単体試験。Steam AppIDなしで可能</td>
+</tr>
+<tr>
+<td>YA-02</td>
+<td>Planned</td>
+<td>職業・ポイント・マスタ検証</td>
+<td>01</td>
+<td>50職の参照・武器・予算・解放・スキル進化を検証</td>
+<td>QA01,QA02,QA03</td>
+</tr>
+<tr>
+<td>YA-03</td>
+<td>Planned</td>
+<td>4職の自動戦闘</td>
+<td>01,02</td>
+<td>ダメージ・回復・MP・AI・状態・KO・100ms量子化</td>
+<td>QA04,QA05,QA06</td>
+</tr>
+<tr>
+<td>YA-04</td>
+<td>Planned</td>
+<td>装備生成・抽選</td>
+<td>02</td>
+<td>5部位、レア、初期効果、ソケット、由来制限、天井</td>
+<td>QA08、固定seed生成結果</td>
+</tr>
+<tr>
+<td>YA-05</td>
+<td>Planned</td>
+<td>永続化・出撃・報酬</td>
+<td>03,04</td>
+<td>DB移行、操作ID、run/checkpoint/grant、全滅300秒</td>
+<td>QA07,QA10,QA11の基本部分</td>
+</tr>
+<tr>
+<td>YA-06</td>
+<td>Planned</td>
+<td>合成・所持品</td>
+<td>04,05</td>
+<td>100%合成、消費、永久本人専用化、上書き</td>
+<td>QA09と合成時競合試験</td>
+</tr>
+<tr>
+<td>YA-07</td>
+<td>Planned</td>
+<td>クライアント縦切り画面</td>
+<td>03,05,06</td>
+<td>拠点→ポイント→装備→出撃→結果の一連の操作</td>
+<td>UI01〜10の必須導線、QA13の基本部分</td>
+</tr>
+<tr>
+<td>YA-08</td>
+<td>Planned</td>
+<td>4職1ダンジョン統合</td>
+<td>07</td>
+<td>NPC補完で初回出撃から合成・次出撃まで継続</td>
+<td>縦切り受入記録。50職完了とは表示しない</td>
+</tr>
+<tr>
+<td>YA-09</td>
+<td>Planned</td>
+<td>全50職の効果展開</td>
+<td>02,03,08</td>
+<td>300系統と全固有特性を実行可能なマスタへ展開</td>
+<td>効果プログラムのテストと全職ロード</td>
+</tr>
+<tr>
+<td>YA-10</td>
+<td>Planned</td>
+<td>12地域と6難易度</td>
+<td>04,08</td>
+<td>通常敵、ボスAI、素材、解放、天井を設定</td>
+<td>全難易度の進行・抽選・到達条件</td>
+</tr>
+<tr>
+<td>YA-11</td>
+<td>Planned</td>
+<td>離席・復帰・障害処理</td>
+<td>05,08</td>
+<td>8時間指示、枠予約、リーダー不在、再精算を安定化</td>
+<td>QA05,QA07,QA11、停止/再送の障害注入</td>
+</tr>
+<tr>
+<td>YA-12</td>
+<td>外部条件待ち</td>
+<td>Steamの実接続</td>
+<td>01,05</td>
+<td>実AppIDの認証、所有確認、失効、招待、実績</td>
+<td>QA15。Steam資格情報・配布設定が必要</td>
+</tr>
+<tr>
+<td>YA-13</td>
+<td>Planned</td>
+<td>4人協力</td>
+<td>08,11</td>
+<td>全員同意、固定編成、役割、個人報酬、切断復帰</td>
+<td>QA12の通常パーティー部分</td>
+</tr>
+<tr>
+<td>YA-14</td>
+<td>Planned</td>
+<td>街とチャンネル</td>
+<td>07,13</td>
+<td>40人チャンネル、状態同期、共通経済との接続</td>
+<td>人数境界、通信断、状態再取得</td>
+</tr>
+<tr>
+<td>YA-15</td>
+<td>Planned</td>
+<td>直接交換</td>
+<td>05,06</td>
+<td>双方提示、予約、内容変更時リセット、原子的交換</td>
+<td>QA10、同時出撃/合成/取消との競合</td>
+</tr>
+<tr>
+<td>YA-16</td>
+<td>Planned</td>
+<td>ゲーム内取引所</td>
+<td>15</td>
+<td>出品、手数料、購入、取消、期限、受取予約</td>
+<td>同時購入、価格競合、期限切れ、台帳検証</td>
+</tr>
+<tr>
+<td>YA-17</td>
+<td>Planned</td>
+<td>ギルド・チャット・通報</td>
+<td>14</td>
+<td>権限、50人上限、ブロック、通報証跡、共同目標</td>
+<td>投稿制限、権限逸脱、重複報酬なし</td>
+</tr>
+<tr>
+<td>YA-18</td>
+<td>Planned</td>
+<td>12人レイド</td>
+<td>09,10,13</td>
+<td>3隊別行動、目的達成、失敗、全員報酬</td>
+<td>QA12のレイド部分</td>
+</tr>
+<tr>
+<td>YA-19</td>
+<td>Planned</td>
+<td>アート・音・操作性</td>
+<td>08,09,10</td>
+<td>50職・敵・地域・魔法演出の制作、文字拡大、パッド</td>
+<td>QA13、素材ライセンス台帳</td>
+</tr>
+<tr>
+<td>YA-20</td>
+<td>Planned</td>
+<td>初級職と経済のバランス</td>
+<td>09,10,15,16,18</td>
+<td>初級20職の終盤用途、G/レア供給と消費を計測</td>
+<td>QA14。調整前後の計測結果を保存</td>
+</tr>
+<tr>
+<td>YA-21</td>
+<td>外部条件待ち</td>
+<td>負荷・監視・復旧</td>
+<td>11,14,16,18</td>
+<td>運営環境、性能目標、監視、復元、Version移行</td>
+<td>QA16。D01の運営方針確定後に実環境を使用</td>
+</tr>
+<tr>
+<td>YA-22</td>
+<td>Planned</td>
+<td>公開前の確認</td>
+<td>12,19,20,21</td>
+<td>販売方式、名称・素材、運営方針、ストア表示、テスト</td>
+<td>D01〜08の必要事項、公開前チェック</td>
+</tr>
+<tr>
+<td>YA-23</td>
+<td>Planned</td>
+<td>リリース</td>
+<td>22</td>
+<td>選別した配布物と再現可能なビルド、復旧手順</td>
+<td>受入完了と明示的な公開指示</td>
+</tr>
+<tr>
+<td>YA-M01</td>
+<td>Deferred</td>
+<td>共通Rules全文Snapshot</td>
+<td>なし</td>
+<td>Rules 2.0.0・source commitを固定して正式文書を同期</td>
+<td>RULES_SOURCEと原文の一致。主作業を再度停止させない</td>
+</tr>
+</tbody>
+</table></div>
+<h2>共通の完了条件</h2>
+<p>各実装Taskは対象コード・マスタ・必要な設計差分・試験・レビュー・TASKS/NEXT_WORK/AI_WORK_STATEを同じWork Unitで更新する。証跡は<code>docs/evidence/&lt;Task ID&gt;/</code>へ保存する。外部条件待ちは依存するTaskだけに適用する。</p>
+<p>今回の依頼範囲は設計まで。ゲームが完成したという状態に変更しない。</p>
+</section><section id="section-9"><h1>次のWork Unit</h1>
+<h2>現在の境界</h2>
+<p>要件・基本設計・詳細設計を作成済み。基幹文書はRepositoryのwork、追加のデータ/UI/運用/境界・コンテンツ文書は添付<code>yusha_abandoned_design_supplement_v0.1.1.zip</code>にある。全文のRepository統合は未完了。</p>
+<h2>再開時</h2>
+<p>AGENTS → RULES_SOURCE → TASKS → AI_WORK_STATEを読む。補足のEDGE_CASESを確認し、全滅時刻から300秒、100ms切上げ、戦闘/周回の境界、レイドの目的失敗条件を取り込む。補足を取得できない場合、内容を知っていると装わず未統合のまま記録する。</p>
+<h2>最初の実装Task: YA-01</h2>
+<p>純粋C#のCombat/Domain/Contractsと、Godot .NETクライアント・ASP.NET Coreサーバーのプロジェクト構成を作る。現行互換性を公式資料で確認し具体Versionを固定する。初回のCombat.Advanceは1人対1体、通常攻撃、HP/MP、固定入力、予定イベント、KO判定まで。</p>
+<p>受入条件は、同一入力と乱数位置で同じ結果になること、100msずつ進めた場合とまとめて進めた場合が一致すること、基準ダメージ375が再現すること。基盤が成立した後に4職へ展開する。</p>
+<p>Steam AppIDと運営サーバーが未確定でも純粋ロジックの作成・試験は実施可能。Steam実接続と本番環境はYA-12/YA-21で扱う。</p>
+</section><section id="section-10"><h1>AI Work State</h1>
+<ul>
+<li>Project: Shota-Zaki/yusha-abandoned / 勇者アバンド</li>
+<li>Date: 2026-09-13</li>
+<li>Branch: work</li>
+<li>Core design commit: c8eadd137ca0b685d91707232f8c3b19a8aa6eab</li>
+<li>Design version: Repositoryの基幹v0.1 + 添付補足v0.1.1</li>
+<li>Game implementation: 未開始</li>
+<li>Current task: 設計作成の完了・成果物整理</li>
+<li>Next implementation task: YA-01</li>
+</ul>
+<h2>完了事項</h2>
+<p>要件30件と非機能目標、20+20+10の50職、解放条件、武器制限、固有特性、4能動+2受動の300系統、8属性4段階の命名、ポイント、装備・合成・交換・取引所、12地域6難易度、離席・全滅、APIを基幹文書に定義。</p>
+<p>添付補足にはデータモデル・画面・運用・ADR・境界修正・ボス行動・初回体験・Task計画・検算用モデルとスクリプトを作成。モデルと設計式の37/37静的検算が成功。</p>
+<h2>保存状態</h2>
+<p>GitHubへの追加設計4文書の一括書込みがツール側で拒否された。拒否された内容を別経路でRepositoryへ書き込まず、ユーザーへ渡す補足資料として分離した。Repositoryにそれらの全文が存在すると扱わない。</p>
+<p>添付名は<code>yusha_abandoned_design_supplement_v0.1.1.zip</code>。これは基幹設計14ファイルの完全な複製ではなく、補足と参照リンクを持つ成果物。</p>
+<h2>レビューによる重要な補正</h2>
+<p>全滅制限は追いつき処理の終了時刻ではなく、サーバーが再現した全滅イベント時刻+300秒。行動間隔は最短値適用後に100msへ切上げ。1ルーム/1周回/反復指示を区別する。レイドは目的未達成の隊が全滅し達成不能になった場合も終了する。これらは補足側で明文化済み、基幹文書への反映は残っている。</p>
+<h2>未完了・保留</h2>
+<p>補足全文のRepository統合YA-D03。共通Rules全文Snapshot YA-M01（参照した正式版は2.0.0、source aa9fcf26a5c463e37591438ed3e6f410974c9878）。D01〜08はユーザー確認前の仮決定。ゲーム実装・Steam実機・DB競合・負荷・バランス試験は未実施。</p>
+<p>設計モデルの検算成功をゲーム試験成功へ読み替えない。公開契約・運営費・性能目標を確定済みとしない。</p>
+</section><section id="section-11"><h1>最後に確認する事項</h1>
+<p>ユーザー指定済みの「50職前後」「5部位」「合成後交換不可」「オート」「全滅後5分」は再確認しない。ここでは不足を補って仮決定した部分だけを扱う。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>確認対象</th>
+<th>設計で置いた値・方式</th>
+<th>変更時に主に影響する箇所</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D01</td>
+<td>Steamの使い方・運営費</td>
+<td>Steamサービス+別途運営するゲームサーバー/DB。初期はHTTPS/WSS、SDR必須かは未確定</td>
+<td>配置、通信、認証、予算</td>
+</tr>
+<tr>
+<td>D02</td>
+<td>MMOの規模</td>
+<td>街40人/チャンネル、通常4人、レイド12人、共通経済</td>
+<td>同期、コンテンツ、負荷</td>
+</tr>
+<tr>
+<td>D03</td>
+<td>キャラ数・放置時間</td>
+<td>1活動キャラ、同時出撃1つ、指示1回8時間</td>
+<td>経済供給、負荷、出撃制限</td>
+</tr>
+<tr>
+<td>D04</td>
+<td>対応環境・技術</td>
+<td>Windows優先、Godot .NET/C#、ASP.NET Core、PostgreSQL</td>
+<td>互換性・ビルド・UI</td>
+</tr>
+<tr>
+<td>D05</td>
+<td>販売方式</td>
+<td>買い切りを第一候補。価格未定。初期は性能課金なし</td>
+<td>運営費回収、ストア、権利確認</td>
+</tr>
+<tr>
+<td>D06</td>
+<td>職構成と成長</td>
+<td>初級20/上級20/複合10、キャラ100/職50、4能動+2受動、職外継承なし</td>
+<td>職業・技能・成長マスタ</td>
+</tr>
+<tr>
+<td>D07</td>
+<td>交換と合成の細部</td>
+<td>装備だけでは縛らない。ソケット合成で永久本人専用。内部取引所</td>
+<td>装備の需給、UI、所有権</td>
+</tr>
+<tr>
+<td>D08</td>
+<td>世界観・対戦・失敗</td>
+<td>廃都アバンド、PvE中心、全滅以外の途中撤退/時間切れ/達成不能も300秒案</td>
+<td>コンテンツ、敗北体験、演出</td>
+</tr>
+</tbody>
+</table></div>
+<p>返答を受けたIDだけ承認状態に更新する。未回答を承認済みにしない。数値バランスは採否とは別にプレイテストで検証する。</p>
+</section><section id="section-12"><h1>設計レビューと追跡</h1>
+<h2>判定</h2>
+<p>要件定義から詳細設計まで、基幹文書と補足資料を作成した。補足のRepository統合は未完了。これは書込み状態の問題であり、完成済み文書の存在とゲーム実装完了を混同しない。</p>
+<h2>実施した検証</h2>
+<p>検算用に構造化した設計モデルと式へ37項目を実行し、37/37成功。検査対象はdata/design_model.jsonとtools/validate_design.py内の明示した式。Repository全文から自動抽出して照合した検査ではない。</p>
+<p>職業の循環なし、50職到達可能、4能動+2受動、300ID、同予算、8属性×4段階、配分例53点、レア確率100%、300秒境界、過去の全滅、100ms量子化を確認した。</p>
+<h2>未実施</h2>
+<p>ゲームビルド、Steam実認証、DBロック競合、改ざん対策の実動、オンラインと離席の戦闘一致、描画性能、初級職の終盤バランス、経済シミュレーション、負荷、復元訓練は実装後の試験。</p>
+<h2>指摘と補正</h2>
+<p>全滅時刻の基準、任意msと100ms単位の混在、戦闘/周回のリセット境界、レイド目的達成不能時の終了、初回転職の練習武器、薬の個数予約、自然語数と毒刃の名称を補足で整理した。EDGE_CASESとCONTENT_DETAILSを参照する。</p>
+<h2>要件→設計→実装Task→検証</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>要件</th>
+<th>設計</th>
+<th>Task（YA-省略）</th>
+<th>試験</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FR01</td>
+<td>基本設計・WORLD_MMO・UI</td>
+<td>08,13,14</td>
+<td>QA12,13</td>
+</tr>
+<tr>
+<td>FR02</td>
+<td>BASIC_DESIGN・API</td>
+<td>12</td>
+<td>QA15</td>
+</tr>
+<tr>
+<td>FR03〜05</td>
+<td>JOBS・CATALOG_REFERENCE</td>
+<td>02,09,20</td>
+<td>QA01,02,14</td>
+</tr>
+<tr>
+<td>FR06〜11</td>
+<td>ITEMS_ECONOMY・DATA_MODEL</td>
+<td>04,06,15,16</td>
+<td>QA08,09,10</td>
+</tr>
+<tr>
+<td>FR12〜17</td>
+<td>SKILLS・DETAILED_DESIGN</td>
+<td>02,03,09</td>
+<td>QA03,04,06</td>
+</tr>
+<tr>
+<td>FR18</td>
+<td>UI</td>
+<td>07,19</td>
+<td>QA13</td>
+</tr>
+<tr>
+<td>FR19</td>
+<td>DETAILED_DESIGN</td>
+<td>03</td>
+<td>QA05,06</td>
+</tr>
+<tr>
+<td>FR20</td>
+<td>DETAILED_DESIGN・EDGE_CASES</td>
+<td>05,11</td>
+<td>QA07</td>
+</tr>
+<tr>
+<td>FR21〜24</td>
+<td>WORLD_MMO・DATA_MODEL・EDGE_CASES</td>
+<td>05,11,13,18</td>
+<td>QA10,11,12</td>
+</tr>
+<tr>
+<td>FR25</td>
+<td>ITEMS_ECONOMY・API・DATA_MODEL</td>
+<td>15,16</td>
+<td>QA10</td>
+</tr>
+<tr>
+<td>FR26</td>
+<td>WORLD_MMO・API</td>
+<td>17</td>
+<td>QA12,13</td>
+</tr>
+<tr>
+<td>FR27</td>
+<td>UI・API</td>
+<td>07,19</td>
+<td>QA13</td>
+</tr>
+<tr>
+<td>FR28</td>
+<td>OPERATIONS・DATA_MODEL</td>
+<td>21</td>
+<td>QA16</td>
+</tr>
+<tr>
+<td>FR29</td>
+<td>DATA_MODEL・CATALOG_REFERENCE</td>
+<td>02,09,10</td>
+<td>QA01,02,08</td>
+</tr>
+<tr>
+<td>FR30</td>
+<td>TASKS</td>
+<td>08,22,23</td>
+<td>各Gate</td>
+</tr>
+</tbody>
+</table></div>
+<h2>Design Gate</h2>
+<p>文書全体を参照する前提なら、最初の実装Taskの入力・責務・境界・受入条件を特定できる。Repositoryだけで完全に再開するGateは、YA-D03の補足統合後に再確認する。未確定の運営契約を理由に純粋ロジックの実装まで停止する必要はない。</p>
+</section><section id="section-13"><h1>参照元</h1>
+<p>確認日: 2026-09-13。ゲーム内の名称・係数・人数・上限・料金は創作した仮仕様。以下は外部サービスと一般的な実装の確認用。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>資料</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S01</td>
+<td>Steam Game Servers</td>
+<td>https://partner.steamgames.com/doc/features/multiplayer/game_servers</td>
+</tr>
+<tr>
+<td>S02</td>
+<td>Steam Datagram Relay</td>
+<td>https://partner.steamgames.com/doc/features/multiplayer/steamdatagramrelay</td>
+</tr>
+<tr>
+<td>S03</td>
+<td>Steam認証と所有確認</td>
+<td>https://partner.steamgames.com/doc/features/auth</td>
+</tr>
+<tr>
+<td>S04</td>
+<td>Steam Inventory Service</td>
+<td>https://partner.steamgames.com/doc/features/inventory</td>
+</tr>
+<tr>
+<td>S05</td>
+<td>Godot C#/.NET</td>
+<td>https://docs.godotengine.org/en/stable/tutorials/scripting/c_sharp/index.html</td>
+</tr>
+<tr>
+<td>S06</td>
+<td>ASP.NET Core WebSockets</td>
+<td>https://learn.microsoft.com/en-us/aspnet/core/fundamentals/websockets</td>
+</tr>
+<tr>
+<td>S07</td>
+<td>PostgreSQLの明示的ロック</td>
+<td>https://www.postgresql.org/docs/current/explicit-locking.html</td>
+</tr>
+<tr>
+<td>S08</td>
+<td>指定された自然語の英語用語集</td>
+<td>https://kakkoii-yougosyuu.com/archives/english-nature.html</td>
+</tr>
+<tr>
+<td>S09</td>
+<td>同サイトの光・闇の英語用語集</td>
+<td>https://kakkoii-yougosyuu.com/archives/english-lightdark.html</td>
+</tr>
+</tbody>
+</table></div>
+<p>名前をもじることだけで既存作品との重複や権利上の問題がなくなるわけではない。正式名称・アート・音・フォントの採用前にライセンスと名称の調査を行う。</p>
+</section></main></body></html>
