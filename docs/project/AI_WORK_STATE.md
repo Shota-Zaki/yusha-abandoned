@@ -1,13 +1,13 @@
 # AI Work State
 
 - Project: Shota-Zaki/yusha-abandoned / 勇者アバンド
-- Date: 2026-09-13
+- Date: 2026-10-01
 - Branch: work
 - 今回の開始commit: 2655688744fb88e0cd29dbe4a8e35ea6bcd41517
 - Design: 基幹0.2 + 旧補足0.1.1（source snapshot回収済み、意味統合は未完了）
-- Current: YA-D04 設計更新完了
-- Game implementation: 未開始
-- Next implementation: YA-01
+- Current: YA-01 In Progress — Combat core v1 accepted locally
+- Game implementation: 1対1物理通常攻撃の純粋Combatコア実装済み。クライアント未実装
+- Next implementation: YA-01 Godot/Windows lightweight prototype
 
 ## 今回の回答を反映した確定事項
 
@@ -36,7 +36,7 @@ D09: 週1回、4対4、登録ビルドの非同期オート戦、レベル統一
 
 ## 検証状態
 
-今回は文書の静的レビューのみ。P2P実接続、Steam実機、メモリ/速度、DB競合、PvPバランス、負荷・復元は未実施。前回の37/37は旧設計モデルの記録であり、今回の大会や通信方式がテスト済みという意味ではない。
+2026-10-01: Combat core v1の13テスト成功。375ダメージ、100ms分割一致、8時間72000イベント一致。固定SHA8862d5745405b1b2a69a4c000a4710444a6a01e3。証拠docs/evidence/YA-01/2026-10-01.md。P2P実接続、Steam実機、メモリ/速度、DB競合、PvPバランス、負荷・復元は未実施。前回の37/37は旧設計モデルの記録であり、今回の大会や通信方式がテスト済みという意味ではない。
 
 ## 旧補足と残作業
 
@@ -51,3 +51,7 @@ YA-M01: 共通Rules全文Snapshot未同期。正式版2.0.0/source aa9fcf26a5c46
 ## 次の作業
 
 YA-01の軽量試作と決定的Combatコア。大会はYA-P01/02/03、SteamロビーとP2P比較はYA-12B。正本の更新はwork、公開時だけ必要物をmainへ選別する。
+
+## 再開の優先
+
+NEXT_WORKに従いYA-01のクライアント互換/軽量性を検証する。純粋コアの成功だけでYA-01全体をDoneにしない。

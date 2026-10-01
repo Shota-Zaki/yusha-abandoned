@@ -14,11 +14,11 @@ Revision 0.2 / 2026-09-13。設計・Repository保存・実装・試験を分け
 
 ## 実装計画
 
-以下は未実装。依存列の数字はYA-接頭辞を省略。D01はOPEN_DECISIONSのオンライン方式/費用判断。D09の大会細部は提案である。
+YA-01の純粋Combat骨格を実装・13テストで検証済み（2026-10-01）。クライアント技術受入は残る。それ以外は未実装。依存列の数字はYA-接頭辞を省略。D01はOPEN_DECISIONSのオンライン方式/費用判断。D09の大会細部は提案である。
 
 |ID|状態|目的・変更範囲|依存|受入条件・試験|
 |---|---|---|---|---|
-|YA-01|Ready|軽量技術検証とCombat骨格|D00,D04|Godot 4系Compatibility/C#候補の互換Version、RAM/描画/配布サイズを検証。固定入力と分割Advanceの一致。課金契約に依存しない|
+|YA-01|In Progress|軽量技術検証とCombat骨格|D00,D04|Godot 4系Compatibility/C#候補の互換Version、RAM/描画/配布サイズを検証。固定入力と分割Advanceの一致。課金契約に依存しない|
 |YA-02|Planned|職業・ポイント・マスタ検証|01|50職の参照、武器、予算、解放、進化。QA01/02/03|
 |YA-03|Planned|4職の自動戦闘|01,02|ダメージ・回復・MP・AI・状態・KO・100ms量子化。QA04/05/06。将来のPVP profile入力を分離|
 |YA-04|Planned|装備生成・抽選|02|5部位、レア、初期技能、ソケット、由来制限、天井。QA08|
@@ -47,4 +47,4 @@ Revision 0.2 / 2026-09-13。設計・Repository保存・実装・試験を分け
 |YA-23|Planned|リリース|22|公開必要物を選別したmainと再現可能ビルド。明示的公開指示と受入完了|
 |YA-M01|Deferred|共通Rules全文Snapshot|なし|Rules2.0.0/source commit固定の正式文書同期。主作業を停止させない|
 
-実行したTaskの証跡はdocs/evidence/<ID>/へ保存し、設計差分・試験・レビュー・TASKS/NEXT_WORK/AI_WORK_STATEを同じWork Unitで更新する。今回の依頼範囲は確認回答を受けた設計更新まで。
+実行したTaskの証跡はdocs/evidence/<ID>/へ保存し、設計差分・試験・レビュー・TASKS/NEXT_WORK/AI_WORK_STATEを同じWork Unitで更新する。2026-10-01の継続依頼でYA-01のCombat実装へ着手。証拠はdocs/evidence/YA-01/2026-10-01.md。

@@ -1,0 +1,15 @@
+PASS reference damage 375 and per-stage floor
+PASS interval minimum and ceiling
+PASS PRNG golden vector and independent stream counter
+PASS identical input produces identical output without mutation
+PASS 100ms partition equals batch events, random position and snapshot
+PASS attack boundary and zero duration advance
+PASS simultaneous lethal attacks both resolve, wipe wins, no later events
+PASS earlier lethal attack cancels later action
+PASS MP pulse timing, floor and cap
+PASS mode/profile mismatch and PvP cooldown refused
+PASS input schedule, time, version and ranges rejected atomically
+8h pure-core batch: 249ms, 72000 events (Linux ARM64, not client rendering)
+PASS eight-hour progression equals one-minute checkpoints
+PASS misses do not advance critical/variance streams and reversed entity IDs are ordered
+13 tests passed
