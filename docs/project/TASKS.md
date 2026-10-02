@@ -9,7 +9,7 @@ Revision 0.2 / 2026-09-13。設計・Repository保存・実装・試験を分け
 |YA-D00|Done|要件・基本設計・基幹詳細設計|基幹commit c8eadd137ca0b685d91707232f8c3b19a8aa6eab。以後の改訂は現行正本を優先|
 |YA-D01|Source snapshot preserved|データ/UI/運用/境界/コンテンツ補足|Libraryから回収した可読HTML snapshotを`docs/archive/design-supplement-v0.1.1.html`へ保存。元ZIPのbyte-exact archiveではない|
 |YA-D02|Done（前回記録）|設計モデルの検算|前回の添付に37/37と記録。今回の大会・軽量化を検証した結果ではない|
-|YA-D03|In Progress|旧補足のRepository統合|2026-10-02 EDGE_CASES7節のdispositionと既存FR20/Combat v1の2項目明確化を実施。`docs/quality/YA_D03_EDGE_CASES_RECONCILIATION.md`。DATA_MODEL/UI/運用/content/catalog/ADRと期限境界が残る。全体Doneではない|
+|YA-D03|In Progress|旧補足のRepository統合|2026-10-02 EDGE_CASES7節のdispositionと既存FR20/Combat v1の2項目明確化を実施。`docs/quality/YA_D03_EDGE_CASES_RECONCILIATION.md`。DATA_MODELの所有権/経済論理モデルを統合（`docs/design/DATA_MODEL.md`、`docs/quality/YA_D03_DATA_MODEL_RECONCILIATION.md`）。非経済モデル/入力契約、UI/運用/content/catalog/ADRと期限境界が残る。全体Doneではない|
 |YA-D04|Done|確認回答・600円・軽量化・PvP大会の設計反映|OPEN_DECISIONS、REQUIREMENTS、BASIC_DESIGN、ONLINE_LIGHTWEIGHT、PVP_TOURNAMENTと状態同期。静的レビューはdocs/quality/DESIGN_REVISION_02.md|
 
 ## 実装計画

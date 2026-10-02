@@ -1,3 +1,5 @@
+2026-10-02 YA-D03 DATA_MODEL partial checkpoint: 開始3c92e1b。所有権/経済論理モデルと未実行競合受入をDATA_MODEL.mdへ統合。旧PostgreSQL/列置換/lock順の提案を採用済みにせずD01を保持。次は旧UIの現行契約照合。DB・native tests未実行、YA-D03 In Progress。
+
 # AI Work State
 
 2026-10-02 YA-D03 partial design checkpoint: EDGE_CASES7節のsource/current authority disposition、既存FR20/Combatv1のcooldown/通常攻撃量子化を明確化。`docs/quality/YA_D03_EDGE_CASES_RECONCILIATION.md`。RNGは既存採用履歴として保持、セキュリティ実装変更なし。YA01クライアントと残supplement統合は未完了。今回product/native tests未実行。
