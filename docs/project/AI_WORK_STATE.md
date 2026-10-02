@@ -1,3 +1,5 @@
+2026-10-02 YA-D03 UI checkpoint: 開始891366e。UI01–15と現行大会/Combatv1境界、不可逆確認/再取得、未実行画面受入をUI.mdへ統合。旧8節disposition済み。実画面/アセット制作/試験なし。次はcontent/catalogの照合。
+
 2026-10-02 YA-D03 DATA_MODEL partial checkpoint: 開始3c92e1b。所有権/経済論理モデルと未実行競合受入をDATA_MODEL.mdへ統合。旧PostgreSQL/列置換/lock順の提案を採用済みにせずD01を保持。次は旧UIの現行契約照合。DB・native tests未実行、YA-D03 In Progress。
 
 # AI Work State
