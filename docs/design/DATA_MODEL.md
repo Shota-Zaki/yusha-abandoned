@@ -52,3 +52,5 @@ EQUIPPEDの品は解除してBAGへ移すまで交換不可。合成成功だけ
 |出撃の再開/報酬の再受取|accountの活動出撃と報酬識別が一意、二重報酬なし|
 
 未実行。DB競合、失敗注入、実経済受入は将来の対応Taskで検証する。純粋Combat13件や旧モデル37件をこの表のPASSへ転用しない。
+
+旧全39エンティティの物理候補と必須補正は [DATA_MODEL_STORAGE_CANDIDATE](DATA_MODEL_STORAGE_CANDIDATE.md) を参照。現行論理契約が常に優先する。

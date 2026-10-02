@@ -1,3 +1,5 @@
+2026-10-02 YA-D03 final classification checkpoint: 開始ad35f3e。旧全sectionの正本対応、39entity物理候補、OPERATIONS6節/ADR7判断/EDGE7節を統合。既存vs旧の期限/room回復/DNG12差分を採用せず具体的再開条件へ分離。YA-D03 In Progress、runtime/DB/security/実機未実施。
+
 2026-10-02 YA-D03 content/catalog checkpoint: 開始c076056。旧CONTENT_DETAILS6節をP初期案として保存、職50/プログラム300/段階名32のsource/current一致を新read-only scriptで確認。実ローダー/ゲーム受入なし、次は運用/ADR/非経済モデル。
 
 2026-10-02 YA-D03 UI checkpoint: 開始891366e。UI01–15と現行大会/Combatv1境界、不可逆確認/再取得、未実行画面受入をUI.mdへ統合。旧8節disposition済み。実画面/アセット制作/試験なし。次はcontent/catalogの照合。

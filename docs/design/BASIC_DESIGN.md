@@ -91,3 +91,5 @@ PvPの敗北・切断・タイムアウトをダンジョン全滅と同じイ�
 B案では公開接続、保存、監視、バックアップが必要になる。費用は離席中の冒険数、大会数、イベント数、品とログの増加、DB性能から計測する。完全無料や本番対応人数を保証しない。個人PCを使う場合も電力・回線・障害対応を無料ホスティングと同一視しない。
 
 正本参照: 基幹の外部仕様はSOURCES、今回の一次調査はONLINE_LIGHTWEIGHT、今回の大会仕様はPVP_TOURNAMENT。旧補足v0.1.1のRepository統合状況はAI_WORK_STATEを参照。
+
+運用の設計目標/候補手順は [OPERATIONS](OPERATIONS.md)、旧判断と現行権威は [DECISION_HISTORY](DECISION_HISTORY.md)、旧境界案の分類は [EDGE_CASES](EDGE_CASES.md) を参照。新たな採用/契約/実装の承認とは区別する。
