@@ -20,6 +20,8 @@ D01の契約やSteam AppIDが未確定でもクライアント試作は進める
 
 ## 旧補足の扱い
 
+YA-D03 bounded checkpoint2026-10-02: `docs/quality/YA_D03_EDGE_CASES_RECONCILIATION.md`。EDGE_CASES7節を照合し、採用済みcooldown/通常攻撃量子化のみ現行本文へ明確化。次はDATA_MODEL/所有権/経済のdispositionをv0.2/D01と照合する。旧room復帰/期限境界/catalog修正を未承認のまま固定しない。YA01純粋コア13件を再実行済みにしない。
+
 前回の `yusha_abandoned_design_supplement_v0.1.1.zip` に含まれていた設計内容は、Libraryから取得できた可読HTMLを `docs/archive/design-supplement-v0.1.1.html` としてRepository内へ保存した。これは元ZIPのbyte-exact archiveではなく、履歴入力をRepositoryだけで参照可能にするためのsource snapshotである。
 
 YA-D03の意味統合は未完了。現行v0.2のPvP・600円・軽量化・承認済み決定を常に優先し、旧補足のDATA_MODEL / UI / OPERATIONS / ADR / EDGE_CASES / CONTENT_DETAILS / CATALOG_REFERENCEを差分確認して、現在も有効な内容だけを正本へ統合する。
